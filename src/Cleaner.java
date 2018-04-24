@@ -5,7 +5,15 @@ public class Cleaner extends Employee {
     int rate;
     int workedDays;
 
-    double getSalary() {
-        return (super.getSalary() + rate * workedDays);
+    public double getSalary() {
+        return (super.salary + rate * workedDays);
     }
+    public String toString() {
+        return super.toString()
+                + ", rate = " + rate
+                + ", workedDays = " + workedDays
+                + "]";
+    }
+
+
 }
