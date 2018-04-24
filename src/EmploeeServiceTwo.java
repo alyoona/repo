@@ -136,7 +136,7 @@ public class EmploeeServiceTwo {
         for (int i = 0; i < employeesArray.length - 1; i++) {
             for (int j = i + 1; j < employeesArray.length; j++) {
                 if (employeesArray[i].name.compareTo(employeesArray[j].name) == 0
-                        && Double.compare(employeesArray[i].getSalary(), employeesArray[j].getSalary()) > 0) {
+                    && Double.compare(employeesArray[i].getSalary(), employeesArray[j].getSalary()) > 0) {
                     Employee buffer = employeesArray[i];
                     employeesArray[i] = employeesArray[j];
                     employeesArray[j] = buffer;
@@ -146,5 +146,7 @@ public class EmploeeServiceTwo {
         return employeesArray;
     }
 
-
+    Employee edit(Employee employee) {
+        return  null;
+    }
 }

@@ -11,7 +11,7 @@ public class TestPSVoidMain {
     public static void main(String[] args) {
         EmploeeServiceTwo service = new EmploeeServiceTwo();
 
-        service.generateEmployees(10);
+        service.generateEmployees(4);
         service.printEmployees();
         //System.out.println(service.calculateSalaryAndBonus());
 

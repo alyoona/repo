@@ -13,7 +13,7 @@ public class ArrayStack {
 
     void push(Object value) {
         if (size == array.length) {
-            // grow
+            // g row
             Object[] newArray = new Object[(int) (1.5 * array.length)];
             for (int i = 0; i < array.length; i++) {
                 newArray[i] = array[i];
