@@ -4,8 +4,6 @@ public class ArrayQueue {
 
     Object[] array;
     int size;
-    int start = 0;
-    int end = 0;
 
     public ArrayQueue() {
         array = new Object[2];
@@ -23,17 +21,24 @@ public class ArrayQueue {
         if (size == array.length) {
             array = grow(array);
         }
-
         array[size] = value;
         size++;
-        start++;
-        if(start == 0) {
-            end++;
-        }
+
     }
 
     Object dequeue() {
-        return null;
+        Object item = null;
+        if (size != 0) {
+            item = array[0];
+            Object[] newArray = new Object[array.length - 1];
+            size--;
+            for (int i = 0; i < size; i++) {
+                newArray[i] = array[i + 1];
+            }
+            array = newArray;
+        } else {
+                System.out.println("Queue is empty");}
+        return item;
     }
 
 
