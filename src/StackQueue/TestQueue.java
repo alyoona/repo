@@ -1,30 +1,25 @@
 package StackQueue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by YONA on 23.04.2018.
  */
 public class TestQueue {
     public static void main(String[] args) {
 
-        System.out.println("ArrayQueueImproved");
-        ArrayQueueImp queueImp = new ArrayQueueImp();
-        System.out.println(queueImp.toString());
-        queueImp.enqueue("1");
-        System.out.println(queueImp.toString());
-        queueImp.enqueue("2");
-        System.out.println(queueImp.toString());
-        queueImp.enqueue("3");
-        System.out.println(queueImp.toString());
-        System.out.println(queueImp.dequeue());
-        System.out.println(queueImp.toString());
-        queueImp.enqueue("4");
-        queueImp.enqueue("5");
-        queueImp.enqueue("6");
-        queueImp.enqueue("7");
-        queueImp.enqueue("8");
+        ArrayQueue q = new ArrayQueue();
+        q.enqueue(1);
+        q.enqueue(2);
+        q.enqueue(3);
 
-        System.out.println(queueImp.toString());
+        System.out.println(q.toString());
+        q.dequeue();
 
+        System.out.println(q.toString());
+        q.enqueue(4);
 
+        System.out.println(q.toString());
     }
 }

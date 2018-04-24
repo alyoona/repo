@@ -3,7 +3,6 @@ package ArrayListTask;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -14,19 +13,26 @@ public class ArrayListTest {
     ArrayList listWithThreeElements;
     ArrayList listWithTenElements;
 
+
     @Before
     public void before() {
-        listWithThreeElements = new ArrayList();
-        listWithTenElements = new ArrayList();
-        for (int i = 0; i < 3; i++) {
-            listWithThreeElements.add(i);
-        }
 
-        for (int i = 0; i < 10; i++) {
-            listWithTenElements.add(i);
-        }
     }
 
+    @Test
+    public void testAddValue(){
+        ArrayList list = new ArrayList(2);
+        list.add(1);
+        assertEquals(1,  list.array[0]);
+        list.add(2);
+        list.add(3);
+        assertEquals(3,  list.array[2]);
+    }
+
+    @Test
+    public void testAddValueByIndex(){
+
+    }
 
     @Test
     public void testGet() {

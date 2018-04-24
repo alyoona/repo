@@ -30,9 +30,9 @@ public class ArrayQueue {
         Object item = null;
         if (size != 0) {
             item = array[0];
-            Object[] newArray = new Object[array.length - 1];
+            Object[] newArray = new Object[array.length];
             size--;
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < array.length - 1 ; i++) {
                 newArray[i] = array[i + 1];
             }
             array = newArray;
