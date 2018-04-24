@@ -41,6 +41,24 @@ public class Test {
 
     }
 
+class MultiFieldComparator extends java.util.Comparator{
+  public int compareTo(Object left,Object right){
+     if(left.equals(right))
+       return 0;
+     Person lp=(Person)left;
+     Person rp=(Person)right;
+     if(lp.getName().compareTo(rp.getName())==0){
+        if(lp.getSurname().compareTo(rp.getSurame())==0){
+            //и т.д. по всем полям.
+            return 0;//если все поля равны.
+        }
+        else
+           return lp.getSurname().compareTo(rp.getSurame())
+     }
+     else return lp.getName().compareTo(rp.getName)
+
+  }
+}
 
 
     */
