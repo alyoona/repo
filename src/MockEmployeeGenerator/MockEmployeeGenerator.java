@@ -1,7 +1,9 @@
+package MockEmployeeGenerator;
+
 import java.util.*;
 
 public class MockEmployeeGenerator {
-
+/*
 
     static String[] firstNames = {"Александр","Алексей","Андрей","Артем","Арсений","Владислав","Денис","Дмитрий","Евгений","Егор","Иван","Игорь","Илья","Кирилл","Максим","Матвей","Михаил","Никита","Роман","Руслан","Сергей","Тимофей","Тимур","Ярослав"};
     static String[] lastNames = {"Иванов","Смирнов","Кузнецов","Попов","Васильев","Петров","Соколов","Михайлов","Новиков","Федоров","Морозов","Волков","Алексеев","Лебедев","Семенов","Егоров","Павлов","Козлов","Степанов","Николаев","Орлов","Андреев","Макаров","Никитин","Захаров","Зайцев","Соловьев","Борисов","Яковлев","Григорьев"};
@@ -10,7 +12,7 @@ public class MockEmployeeGenerator {
 
 
 
-    Employee[] generateEmployees(int size) {
+        Employee[] generateEmployees(int size) {
         Employee[] employees = new Employee[size];
         long id =  (long) (Math.random() * size);
         for (int i = 0; i < size; i++) {
@@ -30,8 +32,8 @@ public class MockEmployeeGenerator {
                 gender = "other";
             }
 
-/*
-            Employee employee = new Employee();
+
+            MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee employee = new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee();
             employee.id = id;
             employee.name = name;
             employee.age = age;
@@ -39,10 +41,10 @@ public class MockEmployeeGenerator {
             employee.gender = gender;
 
             employees[i] = employee;
-            */
+
         }
         return employees;
     }
 
-
+*/
 }

@@ -1,8 +1,10 @@
+package EmployeeService;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class EmploeeServiceTwo {
+public class EmploeeService {
 
     Employee[] employeesArray;
     Random random = new Random();
@@ -19,7 +21,7 @@ public class EmploeeServiceTwo {
             id++;
             char employeeType = employeeFlags.charAt(random.nextInt(employeeFlags.length()));
             if (employeeType == 'd') {
-                Developer developer = new Developer();
+                EmployeeService.Developer developer = new EmployeeService.Developer();
                 fillCommonFields(developer, id);
                 developer.fixedBugs = random.nextInt(101);
                 employeesArray[i] = developer;
@@ -30,7 +32,7 @@ public class EmploeeServiceTwo {
                 employeesArray[i] = manager;
 
             } else {
-                Cleaner cleaner = new Cleaner();
+                EmployeeService.Cleaner cleaner = new EmployeeService.Cleaner();
                 fillCommonFields(cleaner, id);
                 cleaner.rate = random.nextInt(51) + 1000;
                 cleaner.workedDays = getWorkedDaysOfCurrentMonth();
@@ -135,8 +137,12 @@ public class EmploeeServiceTwo {
         sortByName();
         for (int i = 0; i < employeesArray.length - 1; i++) {
             for (int j = i + 1; j < employeesArray.length; j++) {
-                if (employeesArray[i].name.compareTo(employeesArray[j].name) == 0
-                    && Double.compare(employeesArray[i].getSalary(), employeesArray[j].getSalary()) > 0) {
+                if (employeesArray[i].name.compareTo(employeesArray[j].name) > 0) {
+                    Employee buffer = employeesArray[i];
+                    employeesArray[i] = employeesArray[j];
+                    employeesArray[j] = buffer;
+                } else if (employeesArray[i].name.compareTo(employeesArray[j].name) == 0
+                        && Double.compare(employeesArray[i].getSalary(), employeesArray[j].getSalary()) > 0) {
                     Employee buffer = employeesArray[i];
                     employeesArray[i] = employeesArray[j];
                     employeesArray[j] = buffer;
@@ -147,6 +153,28 @@ public class EmploeeServiceTwo {
     }
 
     Employee edit(Employee employee) {
-        return  null;
+        int i;
+        for (i = 0; i < employeesArray.length; i++) {
+            if (employeesArray[i].getClass() == employee.getClass()
+                    && employeesArray[i].id == employee.id) {
+
+                employeesArray[i].name = employee.name;
+                employeesArray[i].salary = employee.getSalary();
+                employeesArray[i].age = employee.age;
+                employeesArray[i].gender = employee.gender;
+
+                if (employee instanceof EmployeeService.Developer) {
+                    EmployeeService.Developer developer = (EmployeeService.Developer) employeesArray[i];
+                    developer.fixedBugs = ((EmployeeService.Developer) employee).fixedBugs;
+                } else if (employee instanceof EmployeeService.Cleaner) {
+                    EmployeeService.Cleaner cleaner = (EmployeeService.Cleaner) employeesArray[i];
+                    cleaner.workedDays = ((EmployeeService.Cleaner) employee).workedDays;
+                    cleaner.rate = ((EmployeeService.Cleaner) employee).rate;
+                }
+
+                break;
+            }
+        }
+        return employeesArray[i];
     }
 }

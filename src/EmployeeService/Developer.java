@@ -1,8 +1,8 @@
+package EmployeeService;
+
 import java.util.Random;
 
 public class Developer extends Employee {
-
-
     int fixedBugs = 0;
     static final int COEFFICIENT = 100;
     boolean randomBoolean = new Random().nextBoolean();

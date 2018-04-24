@@ -1,7 +1,6 @@
-/**
- * Created by dp-ptcstd-15 on 4/19/2018.
- */
-public class Manager extends Employee{
+package EmployeeService;
+
+public class Manager extends EmployeeService.Employee {
 
     public double getSalary() {
         return super.salary;

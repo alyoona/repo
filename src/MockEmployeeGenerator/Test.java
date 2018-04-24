@@ -1,10 +1,12 @@
+package MockEmployeeGenerator;
+
 public class Test {
     /*
     public static void main(String[] args) {
-        MockEmployeeGenerator mockEmployeeGenerator = new MockEmployeeGenerator();
-        Employee[] employees = mockEmployeeGenerator.generateEmployees(3);
+        MockEmployeeGenerator.MockEmployeeGenerator mockEmployeeGenerator = new MockEmployeeGenerator.MockEmployeeGenerator();
+        MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] employees = mockEmployeeGenerator.generateEmployees(3);
 
-        EmployeeService employeeService = new EmployeeService();
+        MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService employeeService = new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService();
         employeeService.employees = employees;
 
         System.out.println("print(employees)");
@@ -21,7 +23,7 @@ public class Test {
         System.out.println();
         System.out.println("before update:");
         employeeService.print(employeeService.getById(2));
-        employeeService.update(new Employee(3,"Igor","Ivanov",44,1000));
+        employeeService.update(new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee(3,"Igor","Ivanov",44,1000));
         System.out.println("after update:");
         employeeService.print(employeeService.getById(3));
 

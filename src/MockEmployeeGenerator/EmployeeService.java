@@ -1,11 +1,13 @@
+package MockEmployeeGenerator;
+
 public class EmployeeService {
     /*
 
-    Employee[] employees;
-    Employee employee;
+    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] employees;
+    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee employee;
 
-    Employee getById(long id) {
-        employee = new Employee();
+    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee getById(long id) {
+        employee = new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee();
         for (int i = 0; i < employees.length; i++) {
             if (employees[i].id == id) {
                 employee = employees[i];
@@ -14,8 +16,8 @@ public class EmployeeService {
         return employee;
     }
 
-    Employee[] findByFirstName(String firstName) {
-        Employee[] employeesByFirstName = new Employee[employees.length];
+    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] findByFirstName(String firstName) {
+        MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] employeesByFirstName = new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[employees.length];
         int j = 0;
         for (int i = 0; i < employees.length; i++) {
             if (employees[i].firstName == firstName) {
@@ -26,12 +28,12 @@ public class EmployeeService {
         return employeesByFirstName;
     }
 
-    Employee[] sortByFirstName() {
+    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] sortByFirstName() {
         for (int i = 0; i < employees.length - 1; i++) {
             for (int j = i + 1; j < employees.length; j++) {
 
                 if (employees[i].firstName.charAt(0) > employees[j].firstName.charAt(0)) {
-                    Employee buffer = employees[i];
+                    MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee buffer = employees[i];
                     employees[i] = employees[j];
                     employees[j] = buffer;
                 }
@@ -40,7 +42,7 @@ public class EmployeeService {
         return employees;
     }
 
-    void update(Employee newEmployee) {
+    void update(MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee newEmployee) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i].id == newEmployee.id) {
                 employees[i] = newEmployee;
@@ -48,23 +50,23 @@ public class EmployeeService {
         }
     }
 
-    void delete(Employee newEmployee) {
+    void delete(MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee newEmployee) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i].id == newEmployee.id) {
-                employees[i] = new Employee(0, null, null, 0, 0);
+                employees[i] = new MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee(0, null, null, 0, 0);
             }
         }
     }
 
-    void print(Employee[] employees) {
-        for (Employee employee : employees) {
+    void print(MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee[] employees) {
+        for (MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee employee : employees) {
             if (employee.id != 0) {
                 System.out.println(employee.id + " " + employee.firstName + " " + employee.lastName + " " + employee.age + " " + employee.salary);
             }
         }
     }
 
-    void print(Employee employee) {
+    void print(MockEmployeeGenerator.MockEmployeeGenerator.EmployeeService.Employee employee) {
         System.out.println(employee.id + " " + employee.firstName + " " + employee.lastName + " " + employee.age + " " + employee.salary);
     }
 */
