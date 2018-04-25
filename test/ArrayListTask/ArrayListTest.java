@@ -29,18 +29,18 @@ public class ArrayListTest {
         //step1
         Object beforeAdding = list.array[list.size];
         assertNull(beforeAdding);
-        Object shouldBeInserted = "a";
+        Object shouldBeInserted = 1;
         int sizeShouldBeIncremented = list.size + 1;
-        list.add(1);
+        list.add(shouldBeInserted);
         Object inserted = list.array[list.size - 1];
         int sizeIncremented = list.size;
         assertEquals(shouldBeInserted, inserted);
         assertEquals(sizeShouldBeIncremented, sizeIncremented);
         //step2
         Object previousElementBeforeAdding = list.array[list.size - 1];
-        shouldBeInserted = "a";
+        shouldBeInserted = 2;
         sizeShouldBeIncremented = list.size + 1;
-        list.add(2);
+        list.add(shouldBeInserted);
         Object previousElementAfterAdding = list.size - 2;
         inserted = list.size - 1;
         sizeIncremented = list.size;
@@ -48,9 +48,6 @@ public class ArrayListTest {
         assertEquals(shouldBeInserted, inserted);
         assertEquals(sizeShouldBeIncremented, sizeIncremented);
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testAddValueByIndex() throws IndexOutOfBoundsException{
