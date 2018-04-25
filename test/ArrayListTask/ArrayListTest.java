@@ -47,6 +47,8 @@ public class ArrayListTest {
         assertEquals(previousElementBeforeAdding, previousElementAfterAdding);
         assertEquals(shouldBeInserted, inserted);
         assertEquals(sizeShouldBeIncremented, sizeIncremented);
+        //step3
+        assertEquals(list.size, list.array.length);
     }
 
     @Rule
