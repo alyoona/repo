@@ -1,7 +1,6 @@
 package ArrayListTask;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 
 import static junit.framework.TestCase.assertEquals;
@@ -12,6 +11,8 @@ public class ArrayListTest {
     ArrayList listWithZeroElements;
     ArrayList listWithThreeElements;
     ArrayList listWithTenElements;
+    Object expected;
+    Object actual;
 
 
     @Before
@@ -22,11 +23,17 @@ public class ArrayListTest {
     @Test
     public void testAddValue(){
         ArrayList list = new ArrayList(2);
+        //step1
         list.add(1);
-        assertEquals(1,  list.array[0]);
+        actual = list.array[0];
+        expected = 1;
+        assertEquals(expected, actual);
+        //step2
         list.add(2);
         list.add(3);
-        assertEquals(3,  list.array[2]);
+        actual = list.array[2];
+        expected = 3;
+        assertEquals(expected, actual);
     }
 
     @Test

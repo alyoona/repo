@@ -1,5 +1,6 @@
 package ArrayListTask;
 
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 public class ArrayList implements List {
@@ -18,8 +19,7 @@ public class ArrayList implements List {
 
     public void add(Object value) {
         if (size == array.length) {
-          ///  Object[] new array[array.length + 1]
-            System.arraycopy(array, 0, array, 0, array.length- 1);
+            array = Arrays.copyOf(array, array.length + 1);
         }
         array[size] = value;
         size++;

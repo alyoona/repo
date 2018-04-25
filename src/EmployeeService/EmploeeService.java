@@ -15,10 +15,10 @@ public class EmploeeService {
 
     void generateEmployees(int size) {
 
-        long id = (long) random.nextInt(size);
+        int id = 0;
         employeesArray = new Employee[size];
         for (int i = 0; i < employeesArray.length; i++) {
-            id++;
+            id = id + 1;
             char employeeType = employeeFlags.charAt(random.nextInt(employeeFlags.length()));
             if (employeeType == 'd') {
                 EmployeeService.Developer developer = new EmployeeService.Developer();
@@ -53,13 +53,13 @@ public class EmploeeService {
 
     void printEmployees() {
         for (Employee employee : employeesArray) {
-            System.out.println(employee.toString());
+            System.out.println(employee);
         }
     }
 
     void printEmployees(Employee[] array) {
         for (Employee employee : array) {
-            System.out.println(employee.toString());
+            System.out.println(employee);
         }
     }
 
