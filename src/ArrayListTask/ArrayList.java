@@ -23,14 +23,16 @@ public class ArrayList implements List {
         }
         array[size] = value;
         size++;
-
     }
 
     public void add(Object value, int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        System.arraycopy(array, 0, array, index + 1, array.length);
+        if (size == array.length) {
+            array = Arrays.copyOf(array, array.length + 1);
+        }
+        System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = value;
         size++;
     }

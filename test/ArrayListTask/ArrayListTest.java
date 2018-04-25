@@ -1,9 +1,12 @@
 package ArrayListTask;
 
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 
-
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 
 public class ArrayListTest {
@@ -24,21 +27,79 @@ public class ArrayListTest {
     public void testAddValue(){
         ArrayList list = new ArrayList(2);
         //step1
+        Object beforeAdding = list.array[list.size];
+        assertNull(beforeAdding);
+        Object shouldBeInserted = "a";
+        int sizeShouldBeIncremented = list.size + 1;
         list.add(1);
-        actual = list.array[0];
-        expected = 1;
-        assertEquals(expected, actual);
+        Object inserted = list.array[list.size - 1];
+        int sizeIncremented = list.size;
+        assertEquals(shouldBeInserted, inserted);
+        assertEquals(sizeShouldBeIncremented, sizeIncremented);
         //step2
+        Object previousElementBeforeAdding = list.array[list.size - 1];
+        shouldBeInserted = "a";
+        sizeShouldBeIncremented = list.size + 1;
         list.add(2);
-        list.add(3);
-        actual = list.array[2];
-        expected = 3;
-        assertEquals(expected, actual);
+        Object previousElementAfterAdding = list.size - 2;
+        inserted = list.size - 1;
+        sizeIncremented = list.size;
+        assertEquals(previousElementBeforeAdding, previousElementAfterAdding);
+        assertEquals(shouldBeInserted, inserted);
+        assertEquals(sizeShouldBeIncremented, sizeIncremented);
     }
 
-    @Test
-    public void testAddValueByIndex(){
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
+    @Test
+    public void testAddValueByIndex() throws IndexOutOfBoundsException{
+        ArrayList list = new ArrayList(2);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        //step1 adding into first cell
+        int index = 0;
+        Object shouldBeInserted = "a";
+        Object shouldBeShifted = list.array[index];
+        int sizeShouldBeIncremented = list.size + 1;
+        list.add(shouldBeInserted,index);
+        Object inserted = list.array[index];
+        Object shifted = list.array[index + 1];
+        int sizeIncremented = list.size;
+        assertEquals(shouldBeInserted, inserted);
+        assertEquals(shouldBeShifted, shifted);
+        assertEquals(sizeShouldBeIncremented,sizeIncremented);
+        //step2 adding into last cell
+        index = list.size - 1;
+        shouldBeInserted = "a";
+        shouldBeShifted = list.array[index];
+        list.add(shouldBeInserted,index);
+        inserted = list.array[index];
+        shifted = list.array[index + 1];
+        assertEquals(shouldBeInserted, inserted);
+        assertEquals(shouldBeShifted, shifted);
+        //step3
+        try {
+            list.add("b",-1);
+            Assert.fail("Index should start at zero");
+        } catch (IndexOutOfBoundsException thrown) {
+            Assert.assertNotEquals("", thrown.getMessage());
+        }
+        //step4
+        try {
+            list.add("b",list.size);
+            Assert.fail("Index should be less count of elements");
+        } catch (IndexOutOfBoundsException thrown) {
+            Assert.assertNotEquals("", thrown.getMessage());
+        }
+        //step5
+        try {
+            list.add("b",list.size + 1);
+            Assert.fail("Index should be less count of elements");
+        } catch (IndexOutOfBoundsException thrown) {
+            Assert.assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test
