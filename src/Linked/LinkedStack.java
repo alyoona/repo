@@ -4,16 +4,17 @@ package Linked;
  * Created by dp-ptcstd-15 on 4/24/2018.
  */
 public class LinkedStack {
-    Node head;
+
     Node last;
 
 
     public void push(Object value) {
         Node newNode = new Node(value);
-        if (head == null) {
-            head = newNode;
+        if (last == null) {
+            last = newNode;
+            last.next = null;
 
-        } else if (last.next == null) {
+        } else {
             Node current = last;
             last.next = null;
             while (current.next != null) {
