@@ -1,5 +1,7 @@
 package Linked;
 
+import java.util.StringJoiner;
+
 /**
  * Created by dp-ptcstd-15 on 4/24/2018.
  */
@@ -26,6 +28,18 @@ public class LinkedQueue {
             head = head.next;
             return valueToReturn;
         }
+
+    public String toString() {
+        StringJoiner stringJoiner = new StringJoiner(",", "[", "]");
+
+        Node current = head;
+        while (current != null) {
+            stringJoiner.add(current.value.toString());
+            current = current.next;
+        }
+
+        return stringJoiner.toString();
+    }
 
     }
 

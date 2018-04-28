@@ -1,33 +1,45 @@
 package Linked;
 
+import java.util.StringJoiner;
+
 /**
  * Created by dp-ptcstd-15 on 4/24/2018.
  */
 public class LinkedStack {
 
-    Node last;
-
+    Node firstOut;
 
     public void push(Object value) {
         Node newNode = new Node(value);
-        if (last == null) {
-            last = newNode;
-            last.next = null;
-
+        if (firstOut == null) {
+            firstOut = newNode;
         } else {
-            Node current = last;
-            last.next = null;
-            while (current.next != null) {
-                current = current.next;
-            }
-
-            current.next = newNode;
+            newNode.next = firstOut;
+            firstOut = newNode;
         }
     }
 
     public Object pop() {
-        return null;
+        Object valueToReturn = firstOut.value;
+        firstOut = firstOut.next;
+        return valueToReturn;
     }
 
+    public String toString() {
+        StringBuilder bilder = new StringBuilder();
+        bilder.append("]");
+        while (firstOut.next != null) {
+            bilder.append(firstOut.value.toString());
+            firstOut = firstOut.next;
+            if (firstOut.next == null) {
+                bilder.append(" ,");
+                bilder.append(firstOut.value.toString());
+            } else {
+                bilder.append(" ,");
+            }
+        }
+        bilder.append("[");
+        return bilder.reverse().toString();
+    }
 
 }
