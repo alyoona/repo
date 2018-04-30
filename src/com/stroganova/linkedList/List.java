@@ -1,4 +1,4 @@
-package ArrayListTask;
+package com.stroganova.linkedList;
 
 public interface List {
     // add value to the end of the list

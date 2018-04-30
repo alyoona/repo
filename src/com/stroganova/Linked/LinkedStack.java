@@ -1,6 +1,4 @@
-package Linked;
-
-import java.util.StringJoiner;
+package com.stroganova.Linked;
 
 /**
  * Created by dp-ptcstd-15 on 4/24/2018.

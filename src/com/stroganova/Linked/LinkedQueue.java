@@ -1,4 +1,4 @@
-package Linked;
+package com.stroganova.Linked;
 
 import java.util.StringJoiner;
 
@@ -31,13 +31,11 @@ public class LinkedQueue {
 
     public String toString() {
         StringJoiner stringJoiner = new StringJoiner(",", "[", "]");
-
         Node current = head;
         while (current != null) {
             stringJoiner.add(current.value.toString());
             current = current.next;
         }
-
         return stringJoiner.toString();
     }
 
