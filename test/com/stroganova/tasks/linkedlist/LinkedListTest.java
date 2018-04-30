@@ -1,18 +1,17 @@
-package com.stroganova.tasks.arraylist;
+package com.stroganova.tasks.linkedlist;
 
 import org.junit.*;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class ArrayListTest {
-
-    ArrayList list;
+public class LinkedListTest {
+    private LinkedList list;
 
     @Before
     public void before() {
-        list = new ArrayList();
+        list = new LinkedList();
         list.add("str1");
         list.add("str2");
         list.add("str3");
@@ -22,8 +21,6 @@ public class ArrayListTest {
     public void after() {
         list.clear();
     }
-// notice for me:
-// expected is first, actual is second:  assertEquals(expected, actual);
 
     @Test
     public void testAddIntoEmptyList() {
@@ -288,9 +285,11 @@ public class ArrayListTest {
         assertEquals(3, list.size());
         assertFalse(list.isEmpty());
         list.clear();
+        list.clear();
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
     }
+
 
     @Test
     public void testSize() {
@@ -390,7 +389,7 @@ public class ArrayListTest {
 
     @Test
     public void testToString() {
-        assertEquals("[str1, str2, str3]", list.toString());
+        assertEquals("[str1,str2,str3]", list.toString());
     }
 
     @Test
@@ -401,6 +400,5 @@ public class ArrayListTest {
         }
         assertEquals("str1str2str3", actual);
     }
-
 
 }

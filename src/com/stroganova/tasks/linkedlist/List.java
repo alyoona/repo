@@ -1,6 +1,6 @@
-package com.stroganova.tasks.linkedList;
+package com.stroganova.tasks.linkedlist;
 
-public interface List {
+public interface List extends Iterable{
     // add value to the end of the list
     void add(Object value);
 

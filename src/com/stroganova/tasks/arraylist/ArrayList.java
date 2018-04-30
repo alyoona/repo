@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringJoiner;
 
-public class ArrayList implements List, Iterable {
+public class ArrayList implements List {
     static final int INITIAL_CAPACITY = 5;
 
     private Object[] array;
@@ -23,10 +23,9 @@ public class ArrayList implements List, Iterable {
     }
 
     public void add(Object value, int index) {
-        validation(value);
-        validation(index, "add");
+        validateIndexForAdd(index);
         if (size == array.length) {
-            array = Arrays.copyOf(array, (int) (array.length * 1.5));
+            array = Arrays.copyOf(array, (int) (array.length * 1.5) + 1);
         }
         System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = value;
@@ -34,31 +33,28 @@ public class ArrayList implements List, Iterable {
     }
 
     public Object get(int index) {
-        validation(index, "get");
-        Object elementOfArray = array[index];
-        return elementOfArray;
+        validateIndex(index);
+        return array[index];
     }
 
     public Object set(Object value, int index) {
-        validation(value);
-        validation(index, "set");
+        validateIndex(index);
         Object beforeUpdating = array[index];
         array[index] = value;
         return beforeUpdating;
     }
 
     public Object remove(int index) {
-        validation(index, "remove");
+        validateIndex(index);
         Object removed = array[index];
         System.arraycopy(array, index + 1, array, index, size - index - 1);
         array[size - 1] = null;
         size--;
-
         return removed;
     }
 
     public void clear() {
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < size; i++) {
             array[i] = null;
         }
         size = 0;
@@ -77,18 +73,34 @@ public class ArrayList implements List, Iterable {
     }
 
     public int indexOf(Object value) {
-        for (int i = 0; i < size; i++) {
-            if (array[i].equals(value)) {
-                return i;
+        if (value == null) {
+            for (int i = 0; i < size; i++) {
+                if (array[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (value.equals(array[i])) {
+                    return i;
+                }
             }
         }
         return -1;
     }
 
     public int lastIndexOf(Object value) {
-        for (int i = size - 1; i >= 0; i--) {
-            if (array[i].equals(value)) {
-                return i;
+        if (value == null) {
+            for (int i = size - 1; i >= 0; i--) {
+                if (array[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                if (value.equals(array[i])) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -102,33 +114,26 @@ public class ArrayList implements List, Iterable {
         return stringJoiner.toString();
     }
 
-    private void validation(Object value) {
-        if (value == null) {
-            throw new NullPointerException("Null value should not be contained");
+    private void validateIndex(int index) {
+        if (isEmpty()) {
+            throw new IndexOutOfBoundsException("List is empty, size is " + size);
+        } else if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is " + index + ". It should be between 0 and " + size + "(exclusive).");
         }
     }
 
-    private void validation(int index, String action) {
-        if (action == "add") {
-            if (index < 0 || index > size) {
-                throw new IndexOutOfBoundsException("Index is " + index + ". For adding the index should be between 0" + " and " + size + "(inclusive).");
-            }
-        } else if (isEmpty()) {
-            throw new IndexOutOfBoundsException("List is empty, size is " + size + ", there is nothing to " + action + ".");
-        } else {
-            if (index < 0 || index >= size) {
-                throw new IndexOutOfBoundsException("Index is " + index + ". It should be between 0" + " and " + size + "(exclusive) in order to " + action + " value.");
-            }
+    private void validateIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index is " + index + ". For adding the index should be between 0 and " + size + "(inclusive).");
         }
-
     }
 
     public Iterator iterator() {
         return new MyIterator();
     }
 
-    class MyIterator implements Iterator {
-        int index;
+    private class MyIterator implements Iterator {
+        private int index;
 
         public boolean hasNext() {
             return index < size;
