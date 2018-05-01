@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LinkedList implements List {
 
-    private int size = 0;
+    private int size;
     private Node head;
     private Node tail;
 
@@ -15,102 +15,65 @@ public class LinkedList implements List {
     public void add(Object value, int index) {
         validateIndexForAdd(index);
         Node newNode = new Node(value);
-        if (index == 0 && size == 0) {
+        if (size == 0) {
+            head = tail = newNode;
+        } else if (index == 0) {
+            newNode.next = head;
+            head.prev = newNode;
             head = newNode;
-            tail = head;
         } else if (size == index) {
-            newNode.linkToPrevious = tail;
-            tail.linkToNext = newNode;
-            tail = tail.linkToNext;
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
         } else {
-            Node current = head;
-            Node previous = null;
-            for (int i = 1; i <= index; i++) {
-                previous = current;
-                current = current.linkToNext;
-                current.linkToPrevious = previous;
-            }
-            if (current.linkToPrevious != null) {
-                previous.linkToNext = newNode;
-                newNode.linkToNext = current;
-                current.linkToPrevious = newNode;
-                newNode.linkToPrevious = previous;
-
-            } else {
-                current.linkToPrevious = newNode;
-                newNode.linkToNext = current;
-                head = current.linkToPrevious;
-            }
+            Node current = getNode(index);
+            Node previous = current.prev;
+            previous.next = newNode;
+            newNode.prev = previous;
+            newNode.next = current;
+            current.prev = newNode;
         }
         size++;
     }
 
     public Object remove(int index) {
         validateIndex(index);
-        Node current = head;
-        Node previous = null;
-        for (int i = 1; i <= index; i++) {
-            previous = current;
-            current = current.linkToNext;
-        }
+        Node current = getNode(index);
         Object removed = current.value;
-        current.value = null;
-        size--;
-        if (previous == null) {
-            if (current.linkToNext == null) {
-                head = null;
-            } else {
-                head = current.linkToNext;
-                head.linkToPrevious = null;
-                current.linkToNext = null;
-            }
-        } else if (current.linkToNext != null) {
-            previous.linkToNext = current.linkToNext;
-            current.linkToNext = null;
-            current.linkToPrevious = null;
-            current = previous.linkToNext;
-            current.linkToPrevious = previous;
+        if (size == 1) {
+            tail = head = null;
+        } else if (index == 0) {
+            head = head.next;
+            head.prev = null;
+        } else if (index == size - 1) {
+            tail = tail.prev;
+            tail.next = null;
         } else {
-            tail = current.linkToPrevious;
-            current.linkToPrevious = null;
-            tail.linkToNext = null;
+            Node previous = current.prev;
+            previous.next = current.next;
+            current.next = null;
+            current.prev = null;
+            current = previous.next;
+            current.prev = previous;
         }
+        size--;
         return removed;
     }
 
     public Object get(int index) {
         validateIndex(index);
-        Node current = head;
-        for (int i = 1; i <= index; i++) {
-            current = current.linkToNext;
-        }
-        return current.value;
+        return getNode(index).value;
     }
 
     public Object set(Object value, int index) {
         validateIndex(index);
-        Node current = head;
-        for (int i = 1; i <= index; i++) {
-            current = current.linkToNext;
-        }
-        Object beforeUpdating = current.value;
-        current.value = value;
+        Object beforeUpdating = getNode(index).value;
+        getNode(index).value = value;
         return beforeUpdating;
     }
 
     public void clear() {
-        if (head != null) {
-            Node current = head;
-            while (current.linkToNext != null) {
-                current.value = null;
-                head = current.linkToNext;
-                head.linkToPrevious = null;
-                current.linkToNext = null;
-                current = head;
-            }
-            head.value = null;
-            head = null;
-        }
+        tail = head = null;
         size = 0;
     }
 
@@ -121,14 +84,14 @@ public class LinkedList implements List {
                 if (current.value == null) {
                     return i;
                 }
-                current = current.linkToNext;
+                current = current.next;
             }
         } else {
             for (int i = 0; i < size; i++) {
                 if (value.equals(current.value)) {
                     return i;
                 }
-                current = current.linkToNext;
+                current = current.next;
             }
         }
         return -1;
@@ -141,14 +104,14 @@ public class LinkedList implements List {
                 if (current.value == null) {
                     return i;
                 }
-                current = current.linkToPrevious;
+                current = current.prev;
             }
         } else {
             for (int i = size - 1; i >= 0; i--) {
                 if (value.equals(current.value)) {
                     return i;
                 }
-                current = current.linkToPrevious;
+                current = current.prev;
             }
         }
         return -1;
@@ -171,7 +134,7 @@ public class LinkedList implements List {
         Node current = head;
         while (current != null) {
             stringJoiner.add(String.valueOf(current.value));
-            current = current.linkToNext;
+            current = current.next;
         }
         return stringJoiner.toString();
     }
@@ -184,17 +147,23 @@ public class LinkedList implements List {
     }
 
     private void validateIndex(int index) {
-        if (isEmpty()) {
-            throw new IndexOutOfBoundsException("List is empty, size is " + size);
-        } else if (index < 0 || index >= size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index is " + index + ". It should be between 0 and " + size + "(exclusive).");
         }
     }
 
+    private Node getNode(int index) {
+        Node current = head;
+        for (int i = 1; i <= index; i++) {
+                current = current.next;
+        }
+        return current;
+    }
+
     private static class Node {
-        Object value;
-        Node linkToPrevious;
-        Node linkToNext;
+        private Object value;
+        private Node prev;
+        private Node next;
 
         public Node(Object value) {
             this.value = value;
@@ -207,18 +176,16 @@ public class LinkedList implements List {
 
     private class MyIterator implements Iterator {
         Node current = head;
-        int i = 0;
 
         public boolean hasNext() {
-            return i < size;
-
+            return current != null;
         }
 
         public Object next() {
             Object result = current.value;
-            current = current.linkToNext;
-            i++;
+            current = current.next;
             return result;
         }
+
     }
 }

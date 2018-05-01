@@ -265,7 +265,7 @@ public class LinkedListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveEmptyList() {
         list.clear();
-        list.remove(0);
+        list.remove(5);
     }
 
     @Test
@@ -400,5 +400,4 @@ public class LinkedListTest {
         }
         assertEquals("str1str2str3", actual);
     }
-
 }
