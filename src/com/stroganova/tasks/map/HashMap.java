@@ -3,7 +3,7 @@ package com.stroganova.tasks.map;
 import java.util.*;
 
 public class HashMap implements Map {
-    static final int INITIAL_CAPACITY = 5;
+     static final int INITIAL_CAPACITY = 5;
     private ArrayList[] buckets;
     private int size;
 
