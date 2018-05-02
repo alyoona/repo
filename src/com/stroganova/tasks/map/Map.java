@@ -9,6 +9,10 @@ public interface Map {
 
     int size();
 
-    boolean containsKey(Object value);
+    boolean containsKey(Object key);
+
+
 }
+
+
 

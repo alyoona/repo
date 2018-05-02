@@ -9,17 +9,11 @@ public class Person {
     int age;
    // Phone[] phones;
 
-    public Person() {}
-
-
     public Person (String newName, double newSalary, int newAge) {
         name = newName;
         salary = newSalary;
         age = newAge;
     }
-
-
-
     @Override
     public boolean equals(Object otherPerson) {
         if (this == otherPerson) {
@@ -27,25 +21,30 @@ public class Person {
         }
         if (otherPerson instanceof Person) {
             Person that = (Person) otherPerson;
-
-/*            if (name.equals(that.name)
+           if (name.equals(that.name)
                     && Double.compare(salary, that.salary) == 0
                     && age == that.age
                     ) {
                 return true;
-            }*/
-                if(Objects.equals(name, that.name)
+            }
+        }
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+/*                if(Objects.equals(name, that.name)
                         && Double.compare(salary, that.salary) == 0
                         && age == that.age
                         )
                 {
                     return true;
-                }
-
-        }
-
-        return false;
-    }
-
-}
+                }*/
 
