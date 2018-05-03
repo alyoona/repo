@@ -1,17 +1,16 @@
 package com.stroganova.tasks.map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class HashMapTest {
+public class HashMapPartOneTest {
 
-    HashMap map;
+    HashMapPartOne map;
 
     @Before
     public void before() {
-        map = new HashMap();
+        map = new HashMapPartOne();
         map.put(0, "value1");
         map.put(1, "value2");
         map.put(2, "value3");
@@ -20,22 +19,17 @@ public class HashMapTest {
     }
 
     @Test
-    public void testtest() {
-        map = new HashMap();
-        map.put("key1", "value1");
-        map.get("key1");
-    }
-
-    @Test
     public void testPutZero() {
         map.clear();
         assertEquals(0, map.size());
         assertEquals(null, map.put(5, "value1"));
         assertEquals("value1", map.get(5));
+        assertEquals(0, map.bucket(5));
         assertEquals(1, map.size());
 
         assertEquals(null, map.put(10, "value10"));
         assertEquals("value10", map.get(10));
+        assertEquals(0, map.bucket(10));
         assertEquals(2, map.size());
     }
 
@@ -46,6 +40,7 @@ public class HashMapTest {
         assertEquals(null, map.put(6, "value2"));
         assertEquals("value2", map.get(6));
         assertEquals(1, map.size());
+        assertEquals(1, map.bucket(6));
     }
 
     @Test
@@ -55,6 +50,7 @@ public class HashMapTest {
         assertEquals(null, map.put(7, "value3"));
         assertEquals("value3", map.get(7));
         assertEquals(1, map.size());
+        assertEquals(2, map.bucket(7));
     }
 
     @Test
@@ -64,6 +60,7 @@ public class HashMapTest {
         assertEquals(null, map.put(8, "value4"));
         assertEquals("value4", map.get(8));
         assertEquals(1, map.size());
+        assertEquals(3, map.bucket(8));
     }
 
     @Test
@@ -73,54 +70,66 @@ public class HashMapTest {
         assertEquals(null, map.put(9, "value5"));
         assertEquals("value5", map.get(9));
         assertEquals(1, map.size());
+        assertEquals(4, map.bucket(9));
     }
 
     @Test
     public void testPutUpdatingZero() {
         assertEquals(5, map.size());
+        assertEquals(0, map.bucket(0));
         assertEquals("value1", map.get(0));
         assertEquals("value1", map.put(0, "newValue1"));
         assertEquals("newValue1", map.get(0));
+        assertEquals(0, map.bucket(0));
         assertEquals(5, map.size());
 
         assertEquals(null, map.put(10, "value10"));
         assertEquals("value10", map.get(10));
+        assertEquals(0, map.bucket(10));
         assertEquals(6, map.size());
     }
 
     @Test
     public void testPutUpdatingOne() {
         assertEquals(5, map.size());
+        assertEquals(1, map.bucket(1));
         assertEquals("value2", map.get(1));
         assertEquals("value2", map.put(1, "newValue2"));
         assertEquals("newValue2", map.get(1));
+        assertEquals(1, map.bucket(1));
         assertEquals(5, map.size());
     }
 
     @Test
     public void testPutUpdatingTwo() {
         assertEquals(5, map.size());
+        assertEquals(2, map.bucket(2));
         assertEquals("value3", map.get(2));
         assertEquals("value3", map.put(2, "newValue3"));
         assertEquals("newValue3", map.get(2));
+        assertEquals(2, map.bucket(2));
         assertEquals(5, map.size());
     }
 
     @Test
     public void testPutUpdatingThree() {
         assertEquals(5, map.size());
+        assertEquals(3, map.bucket(3));
         assertEquals("value4", map.get(3));
         assertEquals("value4", map.put(3, "newValue4"));
         assertEquals("newValue4", map.get(3));
+        assertEquals(3, map.bucket(3));
         assertEquals(5, map.size());
     }
 
     @Test
     public void testPutUpdatingFour() {
         assertEquals(5, map.size());
+        assertEquals(4, map.bucket(4));
         assertEquals("value5", map.get(4));
         assertEquals("value5", map.put(4, "newValue5"));
         assertEquals("newValue5", map.get(4));
+        assertEquals(4, map.bucket(4));
         assertEquals(5, map.size());
     }
 
@@ -129,11 +138,13 @@ public class HashMapTest {
         map.clear();
         assertEquals(0, map.size());
         assertEquals(null, map.put(null, "value"));
+        assertEquals(0, map.bucket(null));
         assertEquals("value", map.get(null));
         assertEquals(1, map.size());
 
         assertEquals("value", map.put(null, null));
         assertEquals(null, map.get(null));
+        assertEquals(0, map.bucket(null));
         assertEquals(1, map.size());
 
         assertEquals(true, map.containsKey(null));
@@ -158,24 +169,39 @@ public class HashMapTest {
         assertEquals("value3", map.get(17));
         assertEquals("value4", map.get(18));
         assertEquals("value5", map.get(19));
+        assertEquals(0, map.bucket(15));
+        assertEquals(1, map.bucket(16));
+        assertEquals(2, map.bucket(17));
+        assertEquals(3, map.bucket(18));
+        assertEquals(4, map.bucket(19));
     }
 
     @Test
     public void testRemove() {
         assertEquals(5, map.size());
+        assertEquals(0, map.bucket(0));
         assertEquals("value1", map.remove(0));
+        assertEquals(-1, map.bucket(0));
 
         assertEquals(4, map.size());
+        assertEquals(1, map.bucket(1));
         assertEquals("value2", map.remove(1));
+        assertEquals(-1, map.bucket(1));
 
         assertEquals(3, map.size());
+        assertEquals(2, map.bucket(2));
         assertEquals("value3", map.remove(2));
+        assertEquals(-1, map.bucket(2));
 
         assertEquals(2, map.size());
+        assertEquals(3, map.bucket(3));
         assertEquals("value4", map.remove(3));
+        assertEquals(-1, map.bucket(3));
 
         assertEquals(1, map.size());
+        assertEquals(4, map.bucket(4));
         assertEquals("value5", map.remove(4));
+        assertEquals(-1, map.bucket(4));
         assertEquals(0, map.size());
     }
 
@@ -222,11 +248,6 @@ public class HashMapTest {
     public void testRemoveEmptyMap() {
         map.clear();
         map.get(0);
-    }
-
-    @Test
-    public void etst() {
-        System.out.println(map.toString());
     }
 
 }
