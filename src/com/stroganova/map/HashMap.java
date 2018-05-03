@@ -3,11 +3,15 @@ package com.stroganova.map;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.*;
-//import java.util.Map;
+import java.util.ArrayList;
 
-public class HashMap implements com.stroganova.map.Map {
+public class HashMap implements Map {
     private static final int INITIAL_CAPACITY = 5;
+    private static final double LOAD_FACTOR = 0.75;
+
+
     private ArrayList[] buckets;
+    private ArrayList keys;
     private int size;
 
     public HashMap() {
@@ -18,37 +22,19 @@ public class HashMap implements com.stroganova.map.Map {
         buckets = new ArrayList[capacity];
     }
 
-/*    @Override
-    public Object put(Object key, Object value) {
-        Object oldValue = null;
-
-        ArrayList innerBucket = getInnerBucket(key);
-        if (innerBucket == null) {
-            innerBucket = new ArrayList();
-        }
-        Entry entry = getEntry(key);
-        if (entry != null) {
-            oldValue = entry.value;
-            entry.value = value;
-        } else {
-            Entry newEntry = new Entry(key, value);
-            innerBucket.add(newEntry);
-            size++;
-        }
-        return oldValue;
-    }*/
 
     @Override
     public Object put(Object key, Object value) {
-        Object oldValue = null;
+        if (size > buckets.length * LOAD_FACTOR) {
+            grow();
+        }
         int bucketIndex = getIndex(key);
-
         if (buckets[bucketIndex] == null) {
             buckets[bucketIndex] = new ArrayList();
         }
-
         ArrayList innerBucket = buckets[bucketIndex];
         Entry entry = getEntry(key);
+        Object oldValue = null;
         if (entry != null) {
             oldValue = entry.value;
             entry.value = value;
@@ -63,32 +49,42 @@ public class HashMap implements com.stroganova.map.Map {
 
     @Override
     public Object putIfAbsent(Object key, Object value) {
-        return null;
+        return get(key) != null ? get(key) : put(key, value);
     }
 
     @Override
-    public void putAll(com.stroganova.map.Map map) {
-
+    public void putAll(Map map) {
+        ArrayList mapKeys = map.keys();
+        for (Object mapKey : mapKeys) {
+            Object valueMap = map.get(mapKey);
+            put(mapKey, valueMap);
+        }
     }
 
     @Override
-    public void putAllIfAbsent(com.stroganova.map.Map map) {
-
+    public void putAllIfAbsent(Map map) {
+        ArrayList mapKeys = map.keys();
+        for (Object mapKey : mapKeys) {
+            Object valueMap = map.get(mapKey);
+            putIfAbsent(mapKey, valueMap);
+        }
     }
 
     @Override
     public Object get(Object key) {
         Entry current = getEntry(key);
-        return current.value;
+        return current != null ? current.value : null;
     }
 
     @Override
     public Object remove(Object key) {
         Entry removedEntry = getEntry(key);
         ArrayList innerBucket = getInnerBucket(key);
-        innerBucket.remove(removedEntry);
-        size--;
-        return removedEntry.value;
+        if (innerBucket != null) {
+            innerBucket.remove(removedEntry);
+            size--;
+        }
+        return removedEntry != null ? removedEntry.value : null;
     }
 
 
@@ -103,9 +99,15 @@ public class HashMap implements com.stroganova.map.Map {
     }
 
     private int getIndex(Object key) {
-
-
         return key == null ? 0 : key.hashCode() % buckets.length;
+    }
+
+    private void grow(int length) {
+        buckets = Arrays.copyOf(buckets, length * 2);
+    }
+
+    private void grow() {
+        grow(buckets.length);
     }
 
     private Entry getEntry(Object key) {
@@ -125,11 +127,19 @@ public class HashMap implements com.stroganova.map.Map {
         return buckets[getIndex(key)];
     }
 
-    @Override
-    public Iterator iterator() {
-        return null;
+    public ArrayList keys() {
+        ArrayList keys = new ArrayList();
+        for (int i = 0; i < buckets.length; i++) {
+            if (buckets[i] != null) {
+                ArrayList innerBucket = buckets[i];
+                for (Object obj : innerBucket) {
+                    Entry entry = (Entry) obj;
+                    keys.add(entry.key);
+                }
+            }
+        }
+        return keys;
     }
-
 
     private static class Entry {
         private Object key;
@@ -147,10 +157,38 @@ public class HashMap implements com.stroganova.map.Map {
 
     public void clear() {
         for (int i = 0; i < buckets.length; i++) {
-
+            buckets[i].clear();
             buckets[i] = null;
-
         }
         size = 0;
+    }
+
+    public Iterator iterator() {
+        return new MyIterator();
+    }
+
+    private class MyIterator implements Iterator {
+        int i;
+        int j;
+        int count = size;
+
+        public boolean hasNext() {
+            return size != 0;
+        }
+
+        public Object next() {
+            ArrayList innerBucket = buckets[i];
+            Entry result = (Entry) innerBucket.get(j);
+
+            if (++j < innerBucket.size()) {
+                result = (Entry) innerBucket.get(j);
+            } else {
+                i++;
+                j = 0;
+            }
+
+            return result;
+        }
+
     }
 }

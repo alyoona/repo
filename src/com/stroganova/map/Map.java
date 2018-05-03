@@ -1,5 +1,7 @@
 package com.stroganova.map;
 
+import java.util.ArrayList;
+
 public interface Map extends Iterable {
     Object put(Object key, Object value);
 
@@ -16,6 +18,9 @@ public interface Map extends Iterable {
     int size();
 
     boolean containsKey(Object value);
+
+
+    ArrayList keys();
 }
 
 

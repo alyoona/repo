@@ -1,7 +1,10 @@
 package com.stroganova.map;
 
+
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -202,31 +205,95 @@ public class HashMapTest {
         assertEquals(false, map.containsKey(4));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetMissingKey() {
         map.get(1212);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testGetEmptyMap() {
         map.clear();
         map.get(0);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testRemoveMissingKey() {
-        map.get(1212);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRemoveEmptyMap() {
-        map.clear();
-        map.get(0);
+        map.remove(1212);
     }
 
     @Test
-    public void etst() {
-        System.out.println(map.toString());
+    public void testRemoveEmptyMap() {
+        map.clear();
+        map.remove(0);
     }
 
+    @Test
+    public void testPutIfAbsent() {
+        assertEquals(5, map.size());
+        assertEquals("value1", map.get(0));
+        assertEquals("value1", map.putIfAbsent(0, "newValue1"));
+        assertEquals(5, map.size());
+        assertEquals("value1", map.remove(0));
+        assertEquals(4, map.size());
+        assertEquals(null, map.get(0));
+        assertEquals(null, map.putIfAbsent(0, "newValue1"));
+        assertEquals(5, map.size());
+        assertEquals("newValue1", map.get(0));
+
+    }
+    @Test
+    public void testIterator() {
+        for (Object obj : map) {
+            System.out.println(obj);
+        }
+    }
+
+    @Test
+    public void testPutAllUpdate() {
+
+        HashMap secondMap = new HashMap();
+        secondMap.put(0, "new1");
+        secondMap.put(1, "new2");
+        secondMap.put(2, "new3");
+        secondMap.put(3, "new4");
+        secondMap.put(4, "new5");
+
+        assertEquals("value1", map.get(0));
+        assertEquals("value2", map.get(1));
+        assertEquals("value3", map.get(2));
+        assertEquals("value4", map.get(3));
+        assertEquals("value5", map.get(4));
+        assertEquals(5, map.size());
+
+        map.putAll(secondMap);
+        assertEquals("new1", map.get(0));
+        assertEquals("new2", map.get(1));
+        assertEquals("new3", map.get(2));
+        assertEquals("new4", map.get(3));
+        assertEquals("new5", map.get(4));
+        assertEquals(5, map.size());
+    }
+
+    @Test
+    public void testPutAllAdd() {
+        map = new HashMap(1);
+        map.put(0,0);
+        map.put(1,1);
+        HashMap sec = new HashMap(1);
+        sec.put(2,2);
+        map.putAll(sec);
+        assertEquals(3, map.size());
+        sec.put("key1",5);
+        sec.put("key2",5);
+        sec.put("key3",5);
+        sec.put("key4",5);
+        sec.put("key5",5);
+        ArrayList keys = sec.keys();
+        map.putAll(sec);
+        map.get("key5");
+
+
+
+
+    }
 }
