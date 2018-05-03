@@ -1,9 +1,12 @@
 package com.stroganova.tasks.map;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.*;
+//import java.util.Map;
 
-public class HashMap implements Map {
-     static final int INITIAL_CAPACITY = 5;
+public class HashMap implements Map{
+    private static final int INITIAL_CAPACITY = 5;
     private ArrayList[] buckets;
     private int size;
 
@@ -15,45 +18,79 @@ public class HashMap implements Map {
         buckets = new ArrayList[capacity];
     }
 
-    @Override
+/*    @Override
     public Object put(Object key, Object value) {
-        Object beforePut = null;
-        Entry newEntry = new Entry(key, value);
-        int i = getIndex(key);
-        ArrayList innerBucket;
-        if (buckets[i] == null) {
+        Object oldValue = null;
+
+        ArrayList innerBucket = getInnerBucket(key);
+        if (innerBucket == null) {
             innerBucket = new ArrayList();
-            buckets[i] = innerBucket;
-        } else {
-            innerBucket = buckets[i];
         }
-        int j = getInnerIndex(key);
-        if (j != -1) {
-            Entry currentEntry = (Entry) innerBucket.get(j);
-            beforePut = currentEntry.value;
-            innerBucket.set(j, newEntry);
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            oldValue = entry.value;
+            entry.value = value;
         } else {
+            Entry newEntry = new Entry(key, value);
             innerBucket.add(newEntry);
             size++;
         }
-        return beforePut;
+        return oldValue;
+    }*/
+
+    @Override
+    public Object put(Object key, Object value) {
+        Object oldValue = null;
+        int bucketIndex = getIndex(key);
+
+        if (buckets[bucketIndex] == null) {
+            buckets[bucketIndex] = new ArrayList();
+        }
+
+        ArrayList innerBucket = buckets[bucketIndex];
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            oldValue = entry.value;
+            entry.value = value;
+        } else {
+            Entry newEntry = new Entry(key, value);
+            innerBucket.add(newEntry);
+            size++;
+        }
+        return oldValue;
+    }
+
+
+    @Override
+    public Object putIfAbsent(Object key, Object value) {
+        return null;
+    }
+
+    @Override
+    public void putAll(Map map) {
+
+    }
+
+    @Override
+    public void putAllIfAbsent(Map map) {
+
     }
 
     @Override
     public Object get(Object key) {
-        validate(key);
-        Entry current = (Entry) buckets[getIndex(key)].get(getInnerIndex(key));
+        Entry current = getEntry(key);
         return current.value;
     }
 
     @Override
     public Object remove(Object key) {
-        validate(key);
-        Entry removed = (Entry) buckets[getIndex(key)].get(getInnerIndex(key));
-        buckets[getIndex(key)].remove(getInnerIndex(key));
+        Entry removedEntry = getEntry(key);
+        ArrayList innerBucket = getInnerBucket(key);
+        innerBucket.remove(removedEntry);
         size--;
-        return removed.value;
+        return removedEntry.value;
     }
+
 
     @Override
     public int size() {
@@ -62,23 +99,40 @@ public class HashMap implements Map {
 
     @Override
     public boolean containsKey(Object key) {
-        return getInnerIndex(key) != -1;
+        return getEntry(key) != null;
     }
 
     private int getIndex(Object key) {
         return key == null ? 0 : key.hashCode() % buckets.length;
     }
 
-    private int getInnerIndex(Object key) {
-        ArrayList innerBucket = buckets[getIndex(key)];
+    private Entry getEntry(Object key) {
+        ArrayList innerBucket = getInnerBucket(key);
         if (innerBucket != null) {
-            for (int i = 0; i < innerBucket.size(); i++) {
-                if (Objects.equals(key, ((Entry) innerBucket.get(i)).key)) {
-                    return i;
+            for (Object obj : innerBucket) {
+                Entry entry = (Entry) obj;
+                if (Objects.equals(key, entry.key)) {
+                    return entry;
                 }
             }
         }
-        return -1;
+        return null;
+    }
+
+    private ArrayList getInnerBucket(Object key) {
+        return buckets[getIndex(key)];
+    }
+/*
+    private int getInnerIndex(Object key) {
+        Entry entry = getEntry(key);
+        int index = getInnerBucket(key).indexOf(entry);
+            return entry != null ? index : -1;
+    }
+*/
+
+    @Override
+    public Iterator iterator() {
+        return null;
     }
 
 
@@ -92,41 +146,16 @@ public class HashMap implements Map {
         }
 
         public String toString() {
-            return "[" + String.valueOf(key) + ", " + String.valueOf(value) + "] ";
+            return "[" + key + ", " + value + "] ";
         }
     }
 
     public void clear() {
-        for (int i = 0; i < buckets.length; i++)
-            buckets[i] = null;
-        size = 0;
-    }
-
-    private void validate(Object key) {
-        if (size == 0) {
-            throw new NullPointerException("Map is empty");
-        } else if (getInnerIndex(key) == -1) {
-            throw new NullPointerException("\"" + String.valueOf(key) + "\" key does not exist.");
-        }
-    }
-
-    public int bucket(Object key) {
-        return containsKey(key) ? getIndex(key) : -1;
-    }
-
-    public String toString() {
-        String result = "";
         for (int i = 0; i < buckets.length; i++) {
-            if (buckets[i] != null) {
-                result += "bucket[" + i + "]: ";
-                for (int j = 0; j < buckets[i].size(); j++) {
-                    result += (buckets[i].get(j).toString());
-                }
-                result += "\n";
-            } else {
-                result += "";
-            }
+
+            buckets[i] = null;
+
         }
-        return result;
+        size = 0;
     }
 }

@@ -1,7 +1,13 @@
 package com.stroganova.tasks.map;
 
-public interface Map {
+public interface Map extends Iterable {
     Object put(Object key, Object value);
+
+    Object putIfAbsent(Object key, Object value);
+
+    void putAll(Map map);
+
+    void putAllIfAbsent(Map map);
 
     Object get(Object key);
 
@@ -9,9 +15,7 @@ public interface Map {
 
     int size();
 
-    boolean containsKey(Object key);
-
-
+    boolean containsKey(Object value);
 }
 
 
