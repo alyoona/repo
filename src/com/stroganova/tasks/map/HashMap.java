@@ -66,6 +66,8 @@ public class HashMap implements Map {
     }
 
     private int getIndex(Object key) {
+
+
         return key == null ? 0 : key.hashCode() % buckets.length;
     }
 

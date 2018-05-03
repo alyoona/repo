@@ -250,4 +250,9 @@ public class HashMapTest{
         map.get(0);
     }
 
+    @Test
+    public void etst() {
+        System.out.println(map.toString());
+    }
+
 }
