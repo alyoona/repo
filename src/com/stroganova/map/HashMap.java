@@ -11,7 +11,6 @@ public class HashMap implements Map {
 
 
     private ArrayList[] buckets;
-    private ArrayList keys;
     private int size;
 
     public HashMap() {
