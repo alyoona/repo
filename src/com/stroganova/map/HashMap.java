@@ -1,8 +1,7 @@
 package com.stroganova.map;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Objects;
-import java.util.Map;
 
 public class HashMap implements Map {
     private static final int INITIAL_CAPACITY = 5;
