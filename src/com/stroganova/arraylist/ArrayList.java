@@ -6,7 +6,6 @@ import java.util.StringJoiner;
 
 public class ArrayList implements List {
     static final int INITIAL_CAPACITY = 5;
-
     private Object[] array;
     private int size;
 

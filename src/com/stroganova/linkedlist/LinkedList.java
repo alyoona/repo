@@ -2,8 +2,7 @@ package com.stroganova.linkedlist;
 
 import java.util.*;
 
-public class LinkedList implements com.stroganova.linkedlist.List {
-
+public class LinkedList implements List {
     private int size;
     private Node head;
     private Node tail;
@@ -186,6 +185,5 @@ public class LinkedList implements com.stroganova.linkedlist.List {
             current = current.next;
             return result;
         }
-
     }
 }

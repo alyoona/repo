@@ -1,11 +1,7 @@
 package com.stroganova.map;
 
-
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertEquals;
 
 public class HashMapTest {
@@ -208,23 +204,24 @@ public class HashMapTest {
     @Test
     public void testGetMissingKey() {
         map.get(1212);
+        assertEquals(null, map.get(1212));
     }
 
     @Test
     public void testGetEmptyMap() {
         map.clear();
-        map.get(0);
+        assertEquals(null, map.get(0));
     }
 
     @Test
     public void testRemoveMissingKey() {
-        map.remove(1212);
+        assertEquals(null, map.remove(1212));
     }
 
     @Test
     public void testRemoveEmptyMap() {
         map.clear();
-        map.remove(0);
+        assertEquals(null, map.remove(0));
     }
 
     @Test
@@ -240,12 +237,6 @@ public class HashMapTest {
         assertEquals(5, map.size());
         assertEquals("newValue1", map.get(0));
 
-    }
-    @Test
-    public void testIterator() {
-        for (Object obj : map) {
-            System.out.println(obj);
-        }
     }
 
     @Test
@@ -277,23 +268,125 @@ public class HashMapTest {
     @Test
     public void testPutAllAdd() {
         map = new HashMap(1);
-        map.put(0,0);
-        map.put(1,1);
+        map.put(0, 0);
+        map.put(1, 1);
         HashMap sec = new HashMap(1);
-        sec.put(2,2);
+        sec.put(2, 2);
         map.putAll(sec);
         assertEquals(3, map.size());
-        sec.put("key1",5);
-        sec.put("key2",5);
-        sec.put("key3",5);
-        sec.put("key4",5);
-        sec.put("key5",5);
-        ArrayList keys = sec.keys();
+        sec.put("key1", 5);
+        sec.put("key2", 5);
+        sec.put("key3", 5);
+        sec.put("key4", 5);
+        sec.put("key5", 5);
         map.putAll(sec);
-        map.get("key5");
+        assertEquals(8, map.size());
+    }
 
+    @Test
+    public void testPutAllIfAbsentNotAdd() {
+        HashMap secondMap = new HashMap();
+        secondMap.put(0, "new1");
+        secondMap.put(1, "new2");
+        secondMap.put(2, "new3");
+        secondMap.put(3, "new4");
+        secondMap.put(4, "new5");
+        assertEquals(5, map.size());
+        assertEquals("value1", map.get(0));
+        assertEquals("value2", map.get(1));
+        assertEquals("value3", map.get(2));
+        assertEquals("value4", map.get(3));
+        assertEquals("value5", map.get(4));
+        map.putAllIfAbsent(secondMap);
+        assertEquals(5, map.size());
+        assertEquals("value1", map.get(0));
+        assertEquals("value2", map.get(1));
+        assertEquals("value3", map.get(2));
+        assertEquals("value4", map.get(3));
+        assertEquals("value5", map.get(4));
+    }
 
+    @Test
+    public void testPutAllIfAbsent() {
+        HashMap secondMap = new HashMap();
+        secondMap.put(5, "new1");
+        secondMap.put(6, "new2");
+        secondMap.put(7, "new3");
+        secondMap.put(8, "new4");
+        secondMap.put(9, "new5");
+        assertEquals(5, map.size());
+        assertEquals("value1", map.get(0));
+        assertEquals("value2", map.get(1));
+        assertEquals("value3", map.get(2));
+        assertEquals("value4", map.get(3));
+        assertEquals("value5", map.get(4));
+        map.putAllIfAbsent(secondMap);
+        assertEquals(10, map.size());
+        assertEquals("new1", map.get(5));
+        assertEquals("new2", map.get(6));
+        assertEquals("new3", map.get(7));
+        assertEquals("new4", map.get(8));
+        assertEquals("new5", map.get(9));
+    }
 
+    @Test
+    public void testPutAllIfAbsentNull() {
+        assertEquals("value1", map.put(0, null));
+        assertEquals("value2", map.put(1, null));
+        assertEquals("value3", map.put(2, null));
+        assertEquals("value4", map.put(3, null));
+        assertEquals("value5", map.put(4, null));
+        assertEquals(null, map.get(0));
+        assertEquals(null, map.get(1));
+        assertEquals(null, map.get(2));
+        assertEquals(null, map.get(3));
+        assertEquals(null, map.get(4));
+        assertEquals(5, map.size());
+        HashMap secondMap = new HashMap();
+        secondMap.put(0, "new1");
+        secondMap.put(1, "new2");
+        secondMap.put(2, "new3");
+        secondMap.put(3, "new4");
+        secondMap.put(4, "new5");
+        map.putAllIfAbsent(secondMap);
+        assertEquals(5, map.size());
+        assertEquals("new1", map.get(0));
+        assertEquals("new2", map.get(1));
+        assertEquals("new3", map.get(2));
+        assertEquals("new4", map.get(3));
+        assertEquals("new5", map.get(4));
+    }
 
+    @Test
+    public void lowerBoundOfInteger() {
+        assertEquals(5, map.size());
+        assertEquals(null, map.put(-2147483648, "-2147483648"));
+        assertEquals("-2147483648", map.get(-2147483648));
+        assertEquals(6, map.size());
+    }
+
+    @Test
+    public void testNegativeKey() {
+        assertEquals(5,map.size());
+        String key = "akafh64646kgjkghjdhd565jhdhgdjhgd67676jhkkjhadgvjh43434dvjhdfgvjh88df";
+        assertEquals(-1774215216, key.hashCode());
+        assertEquals(null, map.put(key, "value"));
+        assertEquals("value", map.get(key));
+        assertEquals(6, map.size());
+    }
+
+    @Test
+    public void testIterator() {
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+        map.put("key3", "value3");
+        map.put("key4", "value4");
+        map.put("key5", "value5");
+        String expected = "0:value1 key3:value3 1:value2 key4:value4 2:value3 key5:value5 3:value4 4:value5 key1:value1 key2:value2 ";
+        String actual = "";
+        for (Object obj : map) {
+            actual += obj + " ";
+        }
+        assertEquals(expected, actual);
     }
 }

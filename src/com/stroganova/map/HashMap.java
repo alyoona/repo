@@ -2,14 +2,11 @@ package com.stroganova.map;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.*;
-import java.util.ArrayList;
+import java.util.Map;
 
 public class HashMap implements Map {
     private static final int INITIAL_CAPACITY = 5;
     private static final double LOAD_FACTOR = 0.75;
-
-
     private ArrayList[] buckets;
     private int size;
 
@@ -21,18 +18,14 @@ public class HashMap implements Map {
         buckets = new ArrayList[capacity];
     }
 
-
     @Override
     public Object put(Object key, Object value) {
-        if (size > buckets.length * LOAD_FACTOR) {
-            grow();
-        }
         int bucketIndex = getIndex(key);
         if (buckets[bucketIndex] == null) {
             buckets[bucketIndex] = new ArrayList();
         }
         ArrayList innerBucket = buckets[bucketIndex];
-        Entry entry = getEntry(key);
+        Entry entry = (Entry) getEntry(key);
         Object oldValue = null;
         if (entry != null) {
             oldValue = entry.value;
@@ -42,9 +35,11 @@ public class HashMap implements Map {
             innerBucket.add(newEntry);
             size++;
         }
+        if (size > buckets.length * LOAD_FACTOR) {
+            grow();
+        }
         return oldValue;
     }
-
 
     @Override
     public Object putIfAbsent(Object key, Object value) {
@@ -53,39 +48,40 @@ public class HashMap implements Map {
 
     @Override
     public void putAll(Map map) {
-        ArrayList mapKeys = map.keys();
-        for (Object mapKey : mapKeys) {
-            Object valueMap = map.get(mapKey);
-            put(mapKey, valueMap);
+        Iterator mapIterator = map.iterator();
+        while (mapIterator.hasNext()) {
+            Entry entry = (Entry) mapIterator.next();
+            put(entry.key, entry.value);
         }
     }
 
     @Override
     public void putAllIfAbsent(Map map) {
-        ArrayList mapKeys = map.keys();
-        for (Object mapKey : mapKeys) {
-            Object valueMap = map.get(mapKey);
-            putIfAbsent(mapKey, valueMap);
+        Iterator mapIterator = map.iterator();
+        while (mapIterator.hasNext()) {
+            Entry entry = (Entry) mapIterator.next();
+            putIfAbsent(entry.key, entry.value);
         }
     }
 
     @Override
     public Object get(Object key) {
-        Entry current = getEntry(key);
+        Entry current = (Entry) getEntry(key);
         return current != null ? current.value : null;
     }
 
     @Override
     public Object remove(Object key) {
-        Entry removedEntry = getEntry(key);
-        ArrayList innerBucket = getInnerBucket(key);
-        if (innerBucket != null) {
+        if (containsKey(key)) {
+            Entry removedEntry = (Entry) getEntry(key);
+            int index = getIndex(key);
+            ArrayList innerBucket = buckets[index];
             innerBucket.remove(removedEntry);
             size--;
+            return removedEntry.value;
         }
-        return removedEntry != null ? removedEntry.value : null;
+        return null;
     }
-
 
     @Override
     public int size() {
@@ -98,19 +94,39 @@ public class HashMap implements Map {
     }
 
     private int getIndex(Object key) {
-        return key == null ? 0 : key.hashCode() % buckets.length;
-    }
-
-    private void grow(int length) {
-        buckets = Arrays.copyOf(buckets, length * 2);
+        int index = 0;
+        if (key != null) {
+            index = Math.abs(key.hashCode()) % buckets.length;
+            if (index < 0) {
+                index = -index;
+            }
+        }
+        return index;
     }
 
     private void grow() {
-        grow(buckets.length);
+        buckets = Arrays.copyOf(buckets, (int) (buckets.length * 2));
+        for (int i = 0; i < buckets.length; i++) {
+            ArrayList bucket = buckets[i];
+            if (bucket != null) {
+                for (int j = 0; j < bucket.size(); j++) {
+                    Entry entry = (Entry) bucket.get(j);
+                    if (i != getIndex(entry.key)) {
+                        bucket.remove(j);
+                        size--;
+                        put(entry.key, entry.value);
+                    }
+                }
+                if (bucket.size() == 0) {
+                    buckets[i] = null;
+                }
+            }
+        }
     }
 
-    private Entry getEntry(Object key) {
-        ArrayList innerBucket = getInnerBucket(key);
+    private Object getEntry(Object key) {
+        int index = getIndex(key);
+        ArrayList innerBucket = buckets[index];
         if (innerBucket != null) {
             for (Object obj : innerBucket) {
                 Entry entry = (Entry) obj;
@@ -120,24 +136,6 @@ public class HashMap implements Map {
             }
         }
         return null;
-    }
-
-    private ArrayList getInnerBucket(Object key) {
-        return buckets[getIndex(key)];
-    }
-
-    public ArrayList keys() {
-        ArrayList keys = new ArrayList();
-        for (int i = 0; i < buckets.length; i++) {
-            if (buckets[i] != null) {
-                ArrayList innerBucket = buckets[i];
-                for (Object obj : innerBucket) {
-                    Entry entry = (Entry) obj;
-                    keys.add(entry.key);
-                }
-            }
-        }
-        return keys;
     }
 
     private static class Entry {
@@ -150,13 +148,12 @@ public class HashMap implements Map {
         }
 
         public String toString() {
-            return "[" + key + ", " + value + "] ";
+            return key + ":" + value;
         }
     }
 
     public void clear() {
         for (int i = 0; i < buckets.length; i++) {
-            buckets[i].clear();
             buckets[i] = null;
         }
         size = 0;
@@ -167,27 +164,30 @@ public class HashMap implements Map {
     }
 
     private class MyIterator implements Iterator {
-        int i;
-        int j;
+        int i = 0;
         int count = size;
+        int currentIndex;
+        Iterator bucket = getBucket(i).iterator();
 
         public boolean hasNext() {
-            return size != 0;
+            return count != 0;
         }
 
         public Object next() {
-            ArrayList innerBucket = buckets[i];
-            Entry result = (Entry) innerBucket.get(j);
-
-            if (++j < innerBucket.size()) {
-                result = (Entry) innerBucket.get(j);
-            } else {
-                i++;
-                j = 0;
+            if (!bucket.hasNext()) {
+                currentIndex++;
+                bucket = getBucket(currentIndex).iterator();
             }
-
-            return result;
+            count--;
+            return bucket.next();
         }
 
+        private ArrayList getBucket(int i) {
+            while (buckets[i] == null) {
+                i++;
+            }
+            currentIndex = i;
+            return buckets[i];
+        }
     }
 }
