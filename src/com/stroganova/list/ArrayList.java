@@ -3,7 +3,6 @@ package com.stroganova.list;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringJoiner;
-//import java.util.List
 
 public class ArrayList<E> implements List<E> {
     static final int INITIAL_CAPACITY = 5;

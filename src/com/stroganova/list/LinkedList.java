@@ -138,7 +138,6 @@ public class LinkedList<E> implements List<E> {
         return stringJoiner.toString();
     }
 
-
     private void validateIndexForAdd(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index is " + index + ". For adding the index should be between 0 and " + size + "(inclusive).");

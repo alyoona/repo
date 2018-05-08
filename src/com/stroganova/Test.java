@@ -1,19 +1,21 @@
 package com.stroganova;
 
+import com.stroganova.list.ArrayList;
 import com.stroganova.list.LinkedList;
 import com.stroganova.list.List;
+import com.stroganova.map.HashMap;
 
-/**
- * Created by YONA on 07.05.2018.
- */
+import java.util.Iterator;
+
 public class Test {
     public static void main(String[] args) {
-        List<String> list = new LinkedList<>();
-        list.add("str1");
-        list.add("str2");
-        list.add("str3");
-        for (String s : list) {
-            System.out.println(s);
+        HashMap<Integer,String> map = new HashMap<>();
+        map.put(0, "Value0");
+        map.put(1, "Value1");
+        map.put(2, "Value2");
+        for (HashMap.Entry<Integer,String> entry : map) {//
+            // entry.getKey()
+            System.out.println("key = " + entry.getKey() +", value = " + entry.getValue());
         }
     }
 }

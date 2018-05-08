@@ -6,10 +6,9 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractMapTest {
 
-    Map<? super Object,String> map;
+    Map<Object,String> map;
 
-    public abstract Map<? super Object,String> getMap();
-
+    public abstract Map<Object,String> getMap();
 
     @Before
     public void before() {
@@ -238,7 +237,7 @@ public abstract class AbstractMapTest {
     @Test
     public void testPutAllUpdate() {
 
-        HashMap secondMap = new HashMap();
+        HashMap<Object,String> secondMap = new HashMap<>();
         secondMap.put(0, "new1");
         secondMap.put(1, "new2");
         secondMap.put(2, "new3");
@@ -263,25 +262,25 @@ public abstract class AbstractMapTest {
 
     @Test
     public void testPutAllAdd() {
-        map = new HashMap(1);
-        map.put(0, 0);
-        map.put(1, 1);
-        HashMap sec = new HashMap(1);
-        sec.put(2, 2);
+        map = new HashMap<>(1);
+        map.put(0, "zero");
+        map.put(1, "one");
+        HashMap<Object,String> sec = new HashMap<>(1);
+        sec.put(2, "two");
         map.putAll(sec);
         assertEquals(3, map.size());
-        sec.put("key1", 5);
-        sec.put("key2", 5);
-        sec.put("key3", 5);
-        sec.put("key4", 5);
-        sec.put("key5", 5);
+        sec.put("key1", "five");
+        sec.put("key2", "five");
+        sec.put("key3", "five");
+        sec.put("key4", "five");
+        sec.put("key5", "five");
         map.putAll(sec);
         assertEquals(8, map.size());
     }
 
     @Test
     public void testPutAllIfAbsentNotAdd() {
-        HashMap secondMap = new HashMap();
+        HashMap<Object,String> secondMap = new HashMap<>();
         secondMap.put(0, "new1");
         secondMap.put(1, "new2");
         secondMap.put(2, "new3");
@@ -304,7 +303,7 @@ public abstract class AbstractMapTest {
 
     @Test
     public void testPutAllIfAbsent() {
-        HashMap secondMap = new HashMap();
+        HashMap<Object,String> secondMap = new HashMap<>();
         secondMap.put(5, "new1");
         secondMap.put(6, "new2");
         secondMap.put(7, "new3");
@@ -338,7 +337,7 @@ public abstract class AbstractMapTest {
         assertEquals(null, map.get(3));
         assertEquals(null, map.get(4));
         assertEquals(5, map.size());
-        HashMap secondMap = new HashMap();
+        HashMap<Object,String> secondMap = new HashMap<>();
         secondMap.put(0, "new1");
         secondMap.put(1, "new2");
         secondMap.put(2, "new3");
@@ -381,8 +380,8 @@ public abstract class AbstractMapTest {
         String expected = "0:value1 key3:value3 1:value2 key4:value4 2:value3 key5:value5 3:value4 4:value5 key1:value1 key2:value2 ";
         String actual = "";
 
-        for (<? super Object,String> obj : map) {
-            actual += obj + " ";
+        for (HashMap.Entry<Object,String> entry : map) {
+            actual += entry.getKey()+":"+entry.getValue() + " ";
         }
         assertEquals(expected, actual);
     }

@@ -2,7 +2,7 @@ package com.stroganova.map;
 
 //import java.util.Map
 
-public interface Map<K,V> extends Iterable{
+public interface Map<K,V> extends Iterable<HashMap.Entry<K,V>>{
     V put(K key, V value);
 
     V putIfAbsent(K key, V value);

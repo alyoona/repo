@@ -137,7 +137,7 @@ public class HashMap<K,V> implements Map<K,V> {
         return null;
     }
 
-    private static class Entry<K,V> {
+    public static class Entry<K,V> {
         private K key;
         private V value;
 
@@ -146,8 +146,12 @@ public class HashMap<K,V> implements Map<K,V> {
             value = newValue;
         }
 
-        public String toString() {
-            return key + ":" + value;
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
         }
     }
 
