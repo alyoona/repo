@@ -1,18 +1,22 @@
-package com.stroganova.arraylist;
+package com.stroganova.abstracttest;
 
+import com.stroganova.list.ListNoGeneric;
 import org.junit.*;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-public class ArrayListTest {
 
-    ArrayList list;
+public abstract class AbstractListTestNoGeneric {
+
+    ListNoGeneric list;
+
+    public abstract ListNoGeneric getList();
 
     @Before
     public void before() {
-        list = new ArrayList();
+        list = getList();
         list.add("str1");
         list.add("str2");
         list.add("str3");
@@ -390,7 +394,7 @@ public class ArrayListTest {
 
     @Test
     public void testToString() {
-        assertEquals("[str1, str2, str3]", list.toString());
+        assertEquals("[str1,str2,str3]", list.toString());
     }
 
     @Test
@@ -401,6 +405,5 @@ public class ArrayListTest {
         }
         assertEquals("str1str2str3", actual);
     }
-
 
 }

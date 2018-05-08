@@ -1,17 +1,22 @@
-package com.stroganova.linkedlist;
+package com.stroganova.abstracttest;
 
+
+import com.stroganova.list.*;
 import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class LinkedListTest {
-    private LinkedList list;
+public abstract class AbstractListTest {
+
+    private List<String> list;
+
+    public abstract List<String> getList();
 
     @Before
     public void before() {
-        list = new LinkedList();
+        list = getList();
         list.add("str1");
         list.add("str2");
         list.add("str3");
@@ -21,6 +26,8 @@ public class LinkedListTest {
     public void after() {
         list.clear();
     }
+// notice for me:
+// expected is first, actual is second:  assertEquals(expected, actual);
 
     @Test
     public void testAddIntoEmptyList() {
@@ -265,7 +272,7 @@ public class LinkedListTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testRemoveEmptyList() {
         list.clear();
-        list.remove(5);
+        list.remove(0);
     }
 
     @Test
@@ -285,11 +292,9 @@ public class LinkedListTest {
         assertEquals(3, list.size());
         assertFalse(list.isEmpty());
         list.clear();
-        list.clear();
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
     }
-
 
     @Test
     public void testSize() {
@@ -395,9 +400,10 @@ public class LinkedListTest {
     @Test
     public void testIterator() {
         String actual = "";
-        for (Object obj : list) {
-            actual += String.valueOf(obj);
+        for (String s : list) {
+            actual += String.valueOf(s);
         }
         assertEquals("str1str2str3", actual);
     }
+
 }

@@ -1,21 +1,21 @@
-package com.stroganova.arraylist;
+package com.stroganova.list;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringJoiner;
-import java.util.ArrayList;
+//import java.util.List
 
-public class ArrayListGenerics<E> implements List<E> {
+public class ArrayList<E> implements List<E> {
     static final int INITIAL_CAPACITY = 5;
-    private Object[] array;
+    private E[] array;
     private int size;
 
-    public ArrayListGenerics() {
+    public ArrayList() {
         this(INITIAL_CAPACITY);
     }
 
-    public ArrayListGenerics(int capacity) {
-        array = new Object[capacity];
+    public ArrayList(int capacity) {
+        array = (E[]) new Object[capacity];
     }
 
     public void add(E value) {
@@ -34,20 +34,20 @@ public class ArrayListGenerics<E> implements List<E> {
 
     public E get(int index) {
         validateIndex(index);
-        E result = (E) array[index];
+        E result = array[index];
         return result;
     }
 
     public E set(E value, int index) {
         validateIndex(index);
-        E beforeUpdating = (E) array[index];
+        E beforeUpdating = array[index];
         array[index] = value;
         return beforeUpdating;
     }
 
     public E remove(int index) {
         validateIndex(index);
-        E removed = (E) array[index];
+        E removed = array[index];
         System.arraycopy(array, index + 1, array, index, size - index - 1);
         array[size - 1] = null;
         size--;
@@ -76,13 +76,15 @@ public class ArrayListGenerics<E> implements List<E> {
     public int indexOf(E value) {
         if (value == null) {
             for (int i = 0; i < size; i++) {
-                if (array[i] == null) {
+                E currentValue = array[i];
+                if (currentValue == null) {
                     return i;
                 }
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (value.equals(array[i])) {
+                E currentValue = array[i];
+                if (value.equals(currentValue)) {
                     return i;
                 }
             }
@@ -93,13 +95,15 @@ public class ArrayListGenerics<E> implements List<E> {
     public int lastIndexOf(E value) {
         if (value == null) {
             for (int i = size - 1; i >= 0; i--) {
-                if (array[i] == null) {
+                E currentValue = array[i];
+                if (currentValue == null) {
                     return i;
                 }
             }
         } else {
             for (int i = size - 1; i >= 0; i--) {
-                if (value.equals(array[i])) {
+                E currentValue = array[i];
+                if (value.equals(currentValue)) {
                     return i;
                 }
             }
@@ -108,7 +112,7 @@ public class ArrayListGenerics<E> implements List<E> {
     }
 
     public String toString() {
-        StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
+        StringJoiner stringJoiner = new StringJoiner(",", "[", "]");
         for (int i = 0; i < size; i++) {
             stringJoiner.add(String.valueOf(array[i]));
         }
@@ -129,11 +133,12 @@ public class ArrayListGenerics<E> implements List<E> {
         }
     }
 
-    public Iterator <E> iterator() {
-        return new MyIterator<E>();
+    public  Iterator<E> iterator() {
+        return new MyIterator();
     }
 
-    private class MyIterator<E> implements Iterator<E> {
+    private class MyIterator implements Iterator<E> {
+
         private int index;
 
         public boolean hasNext() {
@@ -141,8 +146,7 @@ public class ArrayListGenerics<E> implements List<E> {
         }
 
         public E next() {
-            E result = (E) array[index++];
-            return result;
+            return array[index++];
         }
     }
 }

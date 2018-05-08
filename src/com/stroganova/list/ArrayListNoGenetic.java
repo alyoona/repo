@@ -1,19 +1,19 @@
-package com.stroganova.arraylist;
+package com.stroganova.list;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringJoiner;
 
-public class ArrayList implements List {
+public class ArrayListNoGenetic implements ListNoGeneric {
     static final int INITIAL_CAPACITY = 5;
     private Object[] array;
     private int size;
 
-    public ArrayList() {
+    public ArrayListNoGenetic() {
         this(INITIAL_CAPACITY);
     }
 
-    public ArrayList(int capacity) {
+    public ArrayListNoGenetic(int capacity) {
         array = new Object[capacity];
     }
 
@@ -106,7 +106,7 @@ public class ArrayList implements List {
     }
 
     public String toString() {
-        StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
+        StringJoiner stringJoiner = new StringJoiner(",", "[", "]");
         for (int i = 0; i < size; i++) {
             stringJoiner.add(String.valueOf(array[i]));
         }

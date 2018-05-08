@@ -1,21 +1,24 @@
 package com.stroganova.map;
 
-public interface Map extends Iterable {
-    Object put(Object key, Object value);
+//import java.util.Map
 
-    Object putIfAbsent(Object key, Object value);
+public interface Map<K,V> extends Iterable{
+    V put(K key, V value);
 
-    void putAll(Map map);
+    V putIfAbsent(K key, V value);
 
-    void putAllIfAbsent(Map map);
+    void putAll(Map<K,V> map);
 
-    Object get(Object key);
+    void putAllIfAbsent(Map<K,V> map);
 
-    Object remove(Object key);
+    V get(K key);
+
+    V remove(K key);
 
     int size();
 
-    boolean containsKey(Object value);
+    boolean containsKey(K key);
+    void clear();
 
 }
 

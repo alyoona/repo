@@ -1,36 +1,35 @@
 package com.stroganova.map;
 
 import java.util.*;
-import java.util.Objects;
 
-public class HashMap<K,V> implements Map<K,V> {
+public class HashMapNoGeneric implements MapNoGeneric {
     private static final int INITIAL_CAPACITY = 5;
     private static final double LOAD_FACTOR = 0.75;
-    private ArrayList<Entry<K,V>>[] buckets;
+    private ArrayList[] buckets;
     private int size;
 
-    public HashMap() {
+    public HashMapNoGeneric() {
         this(INITIAL_CAPACITY);
     }
 
-    public HashMap(int capacity) {
-        buckets = (ArrayList<Entry<K,V>>[]) new ArrayList[capacity];
+    public HashMapNoGeneric(int capacity) {
+        buckets = new ArrayList[capacity];
     }
 
     @Override
-    public V put(K key, V value) {
+    public Object put(Object key, Object value) {
         int bucketIndex = getIndex(key);
         if (buckets[bucketIndex] == null) {
-            buckets[bucketIndex] = new ArrayList<>();
+            buckets[bucketIndex] = new ArrayList();
         }
-        ArrayList<Entry<K,V>> innerBucket = buckets[bucketIndex];
-        Entry<K,V> entry = getEntry(key);
-        V oldValue = null;
+        ArrayList innerBucket = buckets[bucketIndex];
+        Entry entry = (Entry) getEntry(key);
+        Object oldValue = null;
         if (entry != null) {
             oldValue = entry.value;
             entry.value = value;
         } else {
-            Entry<K,V> newEntry = new Entry<>(key, value);
+            Entry newEntry = new Entry(key, value);
             innerBucket.add(newEntry);
             size++;
         }
@@ -41,38 +40,38 @@ public class HashMap<K,V> implements Map<K,V> {
     }
 
     @Override
-    public V putIfAbsent(K key, V value) {
+    public Object putIfAbsent(Object key, Object value) {
         return get(key) != null ? get(key) : put(key, value);
     }
 
     @Override
-    public void putAll(Map<K,V> map) {
-        Iterator<Entry<K,V>> mapIterator = map.iterator();
+    public void putAll(MapNoGeneric map) {
+        Iterator mapIterator = map.iterator();
         while (mapIterator.hasNext()) {
-            Entry<K,V> entry = mapIterator.next();
+            Entry entry = (Entry) mapIterator.next();
             put(entry.key, entry.value);
         }
     }
 
     @Override
-    public void putAllIfAbsent(Map<K,V> map) {
-        Iterator<Entry<K,V>> mapIterator = map.iterator();
+    public void putAllIfAbsent(MapNoGeneric map) {
+        Iterator mapIterator = map.iterator();
         while (mapIterator.hasNext()) {
-            Entry<K,V> entry = mapIterator.next();
+            Entry entry = (Entry) mapIterator.next();
             putIfAbsent(entry.key, entry.value);
         }
     }
 
     @Override
-    public V get(K key) {
-        Entry<K,V> current = getEntry(key);
+    public Object get(Object key) {
+        Entry current = (Entry) getEntry(key);
         return current != null ? current.value : null;
     }
 
     @Override
-    public V remove(K key) {
+    public Object remove(Object key) {
         if (containsKey(key)) {
-            Entry <K,V> removedEntry = getEntry(key);
+            Entry removedEntry = (Entry) getEntry(key);
             int index = getIndex(key);
             ArrayList innerBucket = buckets[index];
             innerBucket.remove(removedEntry);
@@ -88,11 +87,11 @@ public class HashMap<K,V> implements Map<K,V> {
     }
 
     @Override
-    public boolean containsKey(K key) {
+    public boolean containsKey(Object key) {
         return getEntry(key) != null;
     }
 
-    private int getIndex(K key) {
+    private int getIndex(Object key) {
         int index = 0;
         if (key != null) {
             index = Math.abs(key.hashCode()) % buckets.length;
@@ -106,10 +105,10 @@ public class HashMap<K,V> implements Map<K,V> {
     private void grow() {
         buckets = Arrays.copyOf(buckets, (int) (buckets.length * 2));
         for (int i = 0; i < buckets.length; i++) {
-            ArrayList<Entry<K,V>> bucket = buckets[i];
+            ArrayList bucket = buckets[i];
             if (bucket != null) {
                 for (int j = 0; j < bucket.size(); j++) {
-                    Entry<K,V> entry = bucket.get(j);
+                    Entry entry = (Entry) bucket.get(j);
                     if (i != getIndex(entry.key)) {
                         bucket.remove(j);
                         size--;
@@ -123,12 +122,12 @@ public class HashMap<K,V> implements Map<K,V> {
         }
     }
 
-    private Entry<K,V> getEntry(K key) {
+    private Object getEntry(Object key) {
         int index = getIndex(key);
-        ArrayList<Entry<K,V>> innerBucket = buckets[index];
+        ArrayList innerBucket = buckets[index];
         if (innerBucket != null) {
-            for (Entry<K,V> obj : innerBucket) {
-                Entry<K,V> entry = obj;
+            for (Object obj : innerBucket) {
+                Entry entry = (Entry) obj;
                 if (Objects.equals(key, entry.key)) {
                     return entry;
                 }
@@ -137,11 +136,11 @@ public class HashMap<K,V> implements Map<K,V> {
         return null;
     }
 
-    private static class Entry<K,V> {
-        private K key;
-        private V value;
+    private static class Entry {
+        private Object key;
+        private Object value;
 
-        Entry(K newKey, V newValue) {
+        Entry(Object newKey, Object newValue) {
             key = newKey;
             value = newValue;
         }
@@ -158,21 +157,21 @@ public class HashMap<K,V> implements Map<K,V> {
         size = 0;
     }
 
-    public Iterator<Entry<K,V>> iterator() {
+    public Iterator iterator() {
         return new MyIterator();
     }
 
-    private class MyIterator implements Iterator<Entry<K,V>> {
+    private class MyIterator implements Iterator {
         int i = 0;
         int count = size;
         int currentIndex;
-        Iterator<Entry<K,V>> bucket = getBucket(i).iterator();
+        Iterator bucket = getBucket(i).iterator();
 
         public boolean hasNext() {
             return count != 0;
         }
 
-        public Entry<K,V> next() {
+        public Object next() {
             if (!bucket.hasNext()) {
                 currentIndex++;
                 bucket = getBucket(currentIndex).iterator();
@@ -181,7 +180,7 @@ public class HashMap<K,V> implements Map<K,V> {
             return bucket.next();
         }
 
-        private ArrayList<Entry<K,V>> getBucket(int i) {
+        private ArrayList getBucket(int i) {
             while (buckets[i] == null) {
                 i++;
             }

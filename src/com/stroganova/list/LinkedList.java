@@ -1,19 +1,19 @@
-package com.stroganova.linkedlist;
+package com.stroganova.list;
 
 import java.util.*;
 
-public class LinkedList implements List {
+public class LinkedList<E> implements List<E> {
     private int size;
     private Node head;
     private Node tail;
 
-    public void add(Object value) {
+    public void add(E value) {
         add(value, size);
     }
 
-    public void add(Object value, int index) {
+    public void add(E value, int index) {
         validateIndexForAdd(index);
-        Node newNode = new Node(value);
+        Node<E> newNode = new Node<>(value);
         if (size == 0) {
             head = tail = newNode;
         } else if (index == 0) {
@@ -25,8 +25,8 @@ public class LinkedList implements List {
             tail.next = newNode;
             tail = newNode;
         } else {
-            Node current = getNode(index);
-            Node previous = current.prev;
+            Node<E> current = getNode(index);
+            Node<E> previous = current.prev;
             previous.next = newNode;
             newNode.prev = previous;
             newNode.next = current;
@@ -35,10 +35,10 @@ public class LinkedList implements List {
         size++;
     }
 
-    public Object remove(int index) {
+    public E remove(int index) {
         validateIndex(index);
-        Node current = getNode(index);
-        Object removed = current.value;
+        Node<E> current = getNode(index);
+        E removed = (E) current.value;
         if (size == 1) {
             tail = head = null;
         } else if (index == 0) {
@@ -48,7 +48,7 @@ public class LinkedList implements List {
             tail = tail.prev;
             tail.next = null;
         } else {
-            Node previous = current.prev;
+            Node<E> previous = current.prev;
             previous.next = current.next;
             current.next = null;
             current.prev = null;
@@ -59,14 +59,14 @@ public class LinkedList implements List {
         return removed;
     }
 
-    public Object get(int index) {
+    public E get(int index) {
         validateIndex(index);
         return getNode(index).value;
     }
 
-    public Object set(Object value, int index) {
+    public E set(E value, int index) {
         validateIndex(index);
-        Object beforeUpdating = getNode(index).value;
+        E beforeUpdating = getNode(index).value;
         getNode(index).value = value;
         return beforeUpdating;
     }
@@ -76,8 +76,8 @@ public class LinkedList implements List {
         size = 0;
     }
 
-    public int indexOf(Object value) {
-        Node current = head;
+    public int indexOf(E value) {
+        Node<E> current = head;
         if (value == null) {
             for (int i = 0; i < size; i++) {
                 if (current.value == null) {
@@ -96,8 +96,8 @@ public class LinkedList implements List {
         return -1;
     }
 
-    public int lastIndexOf(Object value) {
-        Node current = tail;
+    public int lastIndexOf(E value) {
+        Node<E> current = tail;
         if (value == null) {
             for (int i = size - 1; i >= 0; i--) {
                 if (current.value == null) {
@@ -116,7 +116,7 @@ public class LinkedList implements List {
         return -1;
     }
 
-    public boolean contains(Object value) {
+    public boolean contains(E value) {
         return indexOf(value) != -1;
     }
 
@@ -151,37 +151,37 @@ public class LinkedList implements List {
         }
     }
 
-    private Node getNode(int index) {
-        Node current = head;
+    private Node<E> getNode(int index) {
+        Node<E> current = head;
         for (int i = 1; i <= index; i++) {
                 current = current.next;
         }
         return current;
     }
 
-    private static class Node {
-        private Object value;
-        private Node prev;
-        private Node next;
+    private static class Node<E> {
+        private E value;
+        private Node<E> prev;
+        private Node<E> next;
 
-        public Node(Object value) {
+        public Node(E value) {
             this.value = value;
         }
     }
 
-    public Iterator iterator() {
+    public Iterator<E> iterator() {
         return new MyIterator();
     }
 
-    private class MyIterator implements Iterator {
-        Node current = head;
+    private class MyIterator implements Iterator<E> {
+        Node<E> current = head;
 
         public boolean hasNext() {
             return current != null;
         }
 
-        public Object next() {
-            Object result = current.value;
+        public E next() {
+            E result = current.value;
             current = current.next;
             return result;
         }
