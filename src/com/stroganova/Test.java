@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.util.Iterator;
 
 public class Test {
-    private static File parentDir;
+
 
     public static void main(String[] args) throws IOException {
 

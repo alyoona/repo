@@ -1,20 +1,18 @@
 package com.stroganova.io;
 
 import java.io.File;
+import java.io.IOException;
 
 public class FileManager {
 
     public static int calculateFiles(String somePath) {
-
         int result = 0;
-        File file = new File(somePath);
-        File[] list = file.listFiles();
-        for (int i = 0; i < list.length; i++) {
-            if (list[i].isFile()) {
+        File parentFolder = new File(somePath);
+        for (File folder : parentFolder.listFiles()) {
+            if (folder.isFile()) {
                 result++;
-
             } else {
-                result += calculateFiles(list[i].getAbsolutePath());
+                result += calculateFiles(folder.getAbsolutePath());
             }
         }
         return result;
@@ -22,33 +20,48 @@ public class FileManager {
 
     public static int calculateDirs(String somePath) {
         int result = 0;
-        File file = new File(somePath);
-        File[] list = file.listFiles();
-        for (int i = 0; i < list.length; i++) {
-            if (list[i].isDirectory()) {
+        File parentFolder = new File(somePath);
+        for (File folder : parentFolder.listFiles()) {
+            if (folder.isDirectory()) {
                 result++;
-                result += calculateDirs(list[i].getAbsolutePath());
+                result += calculateDirs(folder.getAbsolutePath());
             }
         }
         return result;
     }
 
     public static void copy(String from, String to) {
-        File fileFrom = new File(from);
-        File fileTo = new File(to);
-        fileTo.mkdir();
-        File[] list = fileFrom.listFiles();
-        for (int i = 0; i < list.length; i++) {
-            if (list[i].isDirectory()) {
-                String currentPathFrom = from + list[i].getPath();
-                String currentPathTo = to + list[i].getPath();
-                File copied = new File(currentPathTo);
-                copied.mkdir();
-                copy(currentPathFrom, currentPathTo);
+        File folderFrom = new File(from);
+        File folderTo = new File(to);
+        folderTo.mkdir();
+        for (File folder : folderFrom.listFiles()) {
+            String nextPathTo = to + "\\" + folder.getName();
+            if (folder.isFile()) {
+                try {
+                    new File(nextPathTo).createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException("error during creating new file: " + nextPathTo, e);
+                }
+            } else {
+                String nextPathFrom = folder.getAbsolutePath();
+                copy(nextPathFrom, nextPathTo);
             }
         }
-
-
     }
 
+    public static void move(String from, String to) {
+        copy(from, to);
+        remove(from);
+    }
+
+    public static void remove(String pathToRemove) {
+        File currentFolder = new File(pathToRemove);
+        if (currentFolder.isDirectory()) {
+            for (File folder : currentFolder.listFiles()) {
+                remove(folder.getAbsolutePath());
+            }
+        }
+        currentFolder.delete();
+    }
 }
+
