@@ -1,7 +1,6 @@
 package com.stroganova.io;
 
 import java.io.File;
-import java.util.Iterator;
 
 public class FileManager {
 
@@ -36,13 +35,16 @@ public class FileManager {
 
     public static void copy(String from, String to) {
         File fileFrom = new File(from);
-        File fileTo = new File(from);
+        File fileTo = new File(to);
+        fileTo.mkdir();
         File[] list = fileFrom.listFiles();
         for (int i = 0; i < list.length; i++) {
             if (list[i].isDirectory()) {
-                String pathTo = fileTo + list[i].getPath();
-                new File(pathTo);
-
+                String currentPathFrom = from + list[i].getPath();
+                String currentPathTo = to + list[i].getPath();
+                File copied = new File(currentPathTo);
+                copied.mkdir();
+                copy(currentPathFrom, currentPathTo);
             }
         }
 
