@@ -18,7 +18,7 @@ public class BufferedInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         if(index == count) {
-            inputStream.read(buffer) ;
+            count = inputStream.read(buffer);
             index = 0;
         }
           if(count == -1) {
