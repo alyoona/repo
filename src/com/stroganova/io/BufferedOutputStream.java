@@ -1,7 +1,7 @@
 package com.stroganova.io;
+
 import java.io.IOException;
 import java.io.OutputStream;
-
 
 public class BufferedOutputStream extends OutputStream {
     private static int DEFAULT_BUFFER_SIZE = 5;
@@ -9,6 +9,7 @@ public class BufferedOutputStream extends OutputStream {
     private byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
     private int count;
     private int index;
+
     public BufferedOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
@@ -28,8 +29,8 @@ public class BufferedOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-      index = off;
-      while(index < (off + len)) {
+        index = off;
+        while (index < (off + len)) {
             write(b[index++]);
         }
     }
@@ -37,16 +38,14 @@ public class BufferedOutputStream extends OutputStream {
     @Override
     public void flush() throws IOException {
         if (count > 0) {
-        outputStream.write(buffer, 0, count);
-        count = 0;
+            outputStream.write(buffer, 0, count);
+            count = 0;
         }
     }
 
     @Override
     public void close() throws IOException {
         flush();
-        outputStream = null;
+        outputStream.close();
     }
-
-
 }
