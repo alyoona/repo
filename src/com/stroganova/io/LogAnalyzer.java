@@ -1,26 +1,22 @@
 package com.stroganova.io;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.io.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class LogAnalyzer {
 
-    public List<LogToken> scanLog(String path, java.time.LocalDateTime timeFrom, LocalDateTime timeTo) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("test.log"))) {
+    public static List<LogToken> scanLog(String path, java.time.LocalDateTime timeFrom, LocalDateTime timeTo) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             List<LogToken> list = new ArrayList<>();
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                String[] temp = currentLine.split(" ", 7);
-                LocalDateTime time = getLocalDateTime(temp[3]);
-                if (time.isEqual(timeFrom) || time.isEqual(timeTo) || (time.isAfter(timeFrom) && time.isBefore(timeTo))) {
-                    HttpMethod method = HttpMethod.getByName(temp[5].substring(1));
-                    String message = temp[6];
+                String[] temp = currentLine.split("\\[|]");
+                LocalDateTime time = getTime(temp[1]);
+                if (isBetween(time, timeFrom, timeTo)) {
+                    HttpMethod method = HttpMethod.getByName(temp[2].substring(2, 5));
+                    String message = temp[2].substring(6);
                     LogToken logToken = new LogToken(time, method, message);
                     list.add(logToken);
                 }
@@ -31,33 +27,63 @@ public class LogAnalyzer {
         } catch (IOException e) {
             throw new RuntimeException("something wrong, ", e);
         }
-
     }
-    static LocalDateTime getLocalDateTime(String dateTimeFromLog) {
-        String[] dt = dateTimeFromLog.split("\\[|/|:",5);
-        StringJoiner joiner = new StringJoiner("-");
-        for (int i = dt.length - 2; i >= 1 ; i--) {
-            joiner.add(dt[i]);
+
+    static LocalDateTime getTime(String str) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MMM/uuuu:HH:mm:ss Z").withLocale(Locale.US);
+        return LocalDateTime.parse(str, formatter);
+    }
+
+    static boolean isBetween(LocalDateTime time, LocalDateTime timeFrom, LocalDateTime timeTo) {
+        if (timeFrom.isAfter(timeTo)) {
+            throw new IllegalArgumentException("dateTimeFrom(" + timeFrom + ") should be equals or to be before dateTimeTo(" + timeTo + ")");
         }
-        String date = joiner.toString();
-        String time = dt[dt.length - 1];
-        String dtForLocalDateTime =  date + "T" +time;
-        return LocalDateTime.parse(dtForLocalDateTime);
+        return time.isEqual(timeFrom) || time.isEqual(timeTo) || (time.isAfter(timeFrom) && time.isBefore(timeTo));
     }
 
-    private static class LogToken {
-        LocalDateTime time;
-        HttpMethod method;
-        String message;
+    public static class LogToken {
+        private LocalDateTime time;
+        private HttpMethod method;
+        private String message;
 
         LogToken(LocalDateTime time, HttpMethod method, String message) {
             this.time = time;
             this.method = method;
             this.message = message;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            LogToken that = (LogToken) o;
+
+            return Objects.equals(time, that.time)
+                    && method.equals(that.method)
+                    && Objects.equals(message, that.message);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = time != null ? time.hashCode() : 0;
+            result = 31 * result + (method != null ? method.hashCode() : 0);
+            result = 31 * result + (message != null ? message.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("LogToken{");
+            sb.append("time=").append(time);
+            sb.append(", method=").append(method);
+            sb.append(", message='").append(message).append('\'');
+            sb.append('}');
+            return sb.toString();
+        }
     }
 
-    private enum HttpMethod {
+    enum HttpMethod {
         GET, POST;
 
         private static HttpMethod getByName(String name) {
