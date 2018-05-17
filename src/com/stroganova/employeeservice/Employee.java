@@ -18,4 +18,8 @@ public abstract class Employee {
                 + ", age = " + age
                 + ", gender = " + gender;
     }
+
+    public String getName() {
+        return name;
+    }
 }

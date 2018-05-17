@@ -2,7 +2,7 @@ package com.stroganova.employeeservice;
 
 public class Manager extends Employee {
 
-    public double getSalary() {
+    public final double getSalary() {
         return super.salary;
     }
 

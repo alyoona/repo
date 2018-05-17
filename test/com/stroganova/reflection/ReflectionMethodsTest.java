@@ -1,5 +1,6 @@
 package com.stroganova.reflection;
 
+import com.stroganova.employeeservice.Manager;
 import org.junit.Test;
 
 public class ReflectionMethodsTest {
@@ -19,6 +20,12 @@ public class ReflectionMethodsTest {
         Class clazz = stringObject.getClass();
         System.out.println(clazz);
         System.out.println();
+    }
+
+    @Test
+    public void testPrintMethodSignaturesWithFinal() {
+        Manager m = new Manager();
+        ReflectionMethods.printMethodSignaturesWithFinal(m);
 
     }
 

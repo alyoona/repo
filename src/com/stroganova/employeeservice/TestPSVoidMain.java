@@ -3,6 +3,17 @@ package com.stroganova.employeeservice;
 public class TestPSVoidMain {
 
     public static void main(String[] args) {
+
+        Employee e = new Manager();
+
+        Class cl = e.getClass();
+
+        System.out.println(e.getClass());
+
+        System.out.println(e.getClass().getName());
+        System.out.println(e.getName());
+
+
         EmploeeService service = new EmploeeService();
 
         service.generateEmployees(2);
