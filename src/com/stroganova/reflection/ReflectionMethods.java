@@ -32,31 +32,31 @@ public class ReflectionMethods {
 
     static void printMethodSignaturesWithFinal(Object obj) {
         Class clazz = obj.getClass();
+        StringBuilder builder = new StringBuilder();
         for (Method method : clazz.getDeclaredMethods()) {
-           if(Modifier.isFinal(method.getModifiers())) {
 
-               StringBuilder builder = new StringBuilder();
-               builder.append(method.getName());
-               builder.append("(");
+            builder.append(method.getName());
+            builder.append("(");
 
-               if (method.getParameterCount() != 0) {
-                   Class[] params = method.getParameterTypes();
-                   for (Class cl : params) {
-                       builder.append(cl.getName());
-                       builder.append(" ");
-                       builder.append(cl.getName().toLowerCase());
-                       builder.append(", ");
-                   }
-                   builder.toString();
-                   int length = builder.toString().length();
-                   builder.replace(length - 2, length - 1, ")");
 
-                   System.out.println(builder.toString());
-               }
-               else
+            if (method.getParameterCount() != 0) {
+                Class[] params = method.getParameterTypes();
+                for (Class cl : params) {
+                    builder.append(cl.getName());
+                    builder.append(",");
 
-           }
+                }
+                builder.toString();
+                int length = builder.toString().length();
+                builder.replace(length - 2, length - 1, ")");
+
+                System.out.println(builder.toString());
+            }
+
+            builder.append(")");
+            builder.append("\n");
         }
+        System.out.println(builder.toString());
     }
 
     //Метод принимает Class и выводит все не публичные методы этого класса
