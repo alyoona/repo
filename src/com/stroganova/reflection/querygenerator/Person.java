@@ -6,7 +6,7 @@ import com.stroganova.reflection.querygenerator.Table;
 
 @Table(name = "Persons")
 public class Person {
-    @Column(name = "person_id")
+    @Column(name = "person_id", isPK = true)
     private int id;
 
     @Column
