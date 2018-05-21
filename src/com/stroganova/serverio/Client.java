@@ -6,21 +6,24 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("localhost", 3000);
-        InputStream inputStream = socket.getInputStream();
 
+        BufferedWriter socketBufferedWriter = new BufferedWriter(
+                new OutputStreamWriter(socket.getOutputStream()));
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
-        writer.newLine();
+        BufferedReader socketBufferedReader =
+                new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        System.getProperty("lineseparator");
-        reader.readLine();
-        String line;
+        BufferedReader consoleBufferedReader =
+                new BufferedReader(new InputStreamReader(System.in));
 
-        byte[] buffer = new byte[1024];
-        while (inputStream.read(buffer) != -1) {
-            System.out.println(new String(buffer));
+        // htmlacademy.ru
+        while (true) {
+            String line = consoleBufferedReader.readLine();
+            socketBufferedWriter.write(line);
+            socketBufferedWriter.newLine();
+            socketBufferedWriter.flush();
+            System.out.println(socketBufferedReader.readLine());
         }
-
     }
 }
+
