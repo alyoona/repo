@@ -3,7 +3,6 @@ package com.stroganova.multithreading;
 import java.io.*;
 import java.util.ArrayList;
 
-// Каждые 15 секунд содержимое листа должно сбрасываться в файл другим потоком.
 public class WritingToFile implements Runnable {
     private ArrayList<String> list;
 
@@ -24,6 +23,16 @@ public class WritingToFile implements Runnable {
 
     @Override
     public void run() {
-        write();
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println();
+            System.out.println("time is over,it will be write to file");
+            write();
+            System.out.println("Done.");
+        }
     }
 }

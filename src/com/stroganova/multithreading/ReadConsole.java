@@ -1,24 +1,26 @@
 package com.stroganova.multithreading;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
+import java.io.*;
+import java.util.*;
 
 public class ReadConsole implements Runnable {
+
     private ArrayList<String> list;
 
     ReadConsole(ArrayList<String> list) {
         this.list = list;
     }
 
-    private void readToList() {
+    public ArrayList<String> getList() {
+        return list;
+    }
 
+    private void readToList() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+            while (true) {
+                String line = reader.readLine();
                 list.add(line);
+                list.add("\n");
             }
         } catch (IOException e) {
             throw new RuntimeException("Error while reading from console: ", e);
