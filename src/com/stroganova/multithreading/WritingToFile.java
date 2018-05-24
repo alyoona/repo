@@ -12,10 +12,11 @@ public class WritingToFile implements Runnable {
 
     private void write() {
         File file = new File("dataFromConsole.txt");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             for (String str : list) {
                 writer.write(str);
             }
+            list.clear();
         } catch (IOException e) {
             throw new RuntimeException("Error while writing from console: ", e);
         }
