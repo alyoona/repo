@@ -6,9 +6,16 @@ import java.net.Socket;
 public class CurrentClientProcessing implements Runnable {
 
     private Socket clientSocket;
+    private boolean ready;
 
     public CurrentClientProcessing(Socket clientSocket) {
         this.clientSocket = clientSocket;
+    }
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+    public boolean isReady() {
+        return ready;
     }
 
     @Override
@@ -19,7 +26,13 @@ public class CurrentClientProcessing implements Runnable {
              BufferedWriter socketBufferedWriter = new BufferedWriter(
                      new OutputStreamWriter(clientSocket.getOutputStream()))) {
             String lineFromClient;
-            while ((lineFromClient = socketBufferedReader.readLine()) != null) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            while (ready = socketBufferedReader.ready()) {
+                lineFromClient = socketBufferedReader.readLine();
                 System.out.println(lineFromClient);
                 String internalServerMessage = statusMessage(lineFromClient);
                 System.out.println(internalServerMessage);
