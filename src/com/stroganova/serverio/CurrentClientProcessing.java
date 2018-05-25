@@ -3,13 +3,15 @@ package com.stroganova.serverio;
 import java.io.*;
 import java.net.Socket;
 
-public class CurrentClientProcessing implements Runnable {
+public class CurrentClientProcessing {
 
     private Socket clientSocket;
     private boolean ready;
 
     public CurrentClientProcessing(Socket clientSocket) {
         this.clientSocket = clientSocket;
+        clientSocket.isConnected();
+                clie
     }
     public Socket getClientSocket() {
         return clientSocket;
@@ -18,8 +20,8 @@ public class CurrentClientProcessing implements Runnable {
         return ready;
     }
 
-    @Override
-    public void run() {
+
+    public void handle() {
         try (
              BufferedReader socketBufferedReader =
                      new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
