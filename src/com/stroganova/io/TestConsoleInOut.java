@@ -10,8 +10,9 @@ public class TestConsoleInOut {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        String line = reader.readLine();
+        System.out.println(reader.ready());
+        int line = reader.read();
+        System.out.println(reader.ready());
         writer.write(line);
         writer.newLine();
         writer.flush();
