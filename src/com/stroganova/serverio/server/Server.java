@@ -15,9 +15,9 @@ public class Server {
         thread.start();
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            synchronized (list) {
+            //synchronized (list) {
                 list.add(clientSocket);
-            }
+            //}
 
         }
     }
