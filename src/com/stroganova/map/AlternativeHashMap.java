@@ -27,9 +27,9 @@ public class AlternativeHashMap {
 
 /*    public ArrayList entryList() {
         ArrayList entries = new ArrayList();
-        for (int i = 0; i < buckets.length; i++) {
-            if (buckets[i] != null) {
-                ArrayList innerBucket = buckets[i];
+        for (int bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++) {
+            if (buckets[bucketIndex] != null) {
+                ArrayList innerBucket = buckets[bucketIndex];
                 for (Object obj : innerBucket) {
                     Entry entry = (Entry) obj;
                     entries.add(entry);

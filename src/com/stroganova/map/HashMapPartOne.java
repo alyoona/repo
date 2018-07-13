@@ -115,7 +115,7 @@ public class HashMapPartOne  {
         String result = "";
         for (int i = 0; i < buckets.length; i++) {
             if (buckets[i] != null) {
-                result += "bucket[" + i + "]: ";
+                result += "bucketIterator[" + i + "]: ";
                 for (int j = 0; j < buckets[i].size(); j++) {
                     result += (buckets[i].get(j).toString());
                 }

@@ -215,6 +215,8 @@ public abstract class AbstractMapTest {
 
     @Test
     public void testRemoveEmptyMap() {
+        HashMap emptyMap = new HashMap();
+        assertEquals(null, emptyMap.remove(0));
         map.clear();
         assertEquals(null, map.remove(0));
     }
@@ -353,7 +355,7 @@ public abstract class AbstractMapTest {
     }
 
     @Test
-    public void lowerBoundOfInteger() {
+    public void testLowerBoundOfInteger() {
         assertEquals(5, map.size());
         assertEquals(null, map.put(-2147483648, "-2147483648"));
         assertEquals("-2147483648", map.get(-2147483648));
@@ -377,7 +379,13 @@ public abstract class AbstractMapTest {
         map.put("key3", "value3");
         map.put("key4", "value4");
         map.put("key5", "value5");
+        /*
         String expected = "0:value1 key3:value3 1:value2 key4:value4 2:value3 key5:value5 3:value4 4:value5 key1:value1 key2:value2 ";
+        for:
+        private void grow() {
+        buckets = Arrays.copyOf(buckets, (buckets.length * 2));
+        */
+        String expected = "0:value1 1:value2 2:value3 3:value4 4:value5 key1:value1 key2:value2 key3:value3 key4:value4 key5:value5 ";
         String actual = "";
 
         for (HashMap.Entry<Object,String> entry : map) {

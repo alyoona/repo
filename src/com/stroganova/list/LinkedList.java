@@ -4,8 +4,8 @@ import java.util.*;
 
 public class LinkedList<E> implements List<E> {
     private int size;
-    private Node head;
-    private Node tail;
+    private Node<E> head;
+    private Node<E> tail;
 
     public void add(E value) {
         add(value, size);
@@ -38,7 +38,7 @@ public class LinkedList<E> implements List<E> {
     public E remove(int index) {
         validateIndex(index);
         Node<E> current = getNode(index);
-        E removed = (E) current.value;
+        E removed = current.value;
         if (size == 1) {
             tail = head = null;
         } else if (index == 0) {
@@ -66,12 +66,20 @@ public class LinkedList<E> implements List<E> {
 
     public E set(E value, int index) {
         validateIndex(index);
-        E beforeUpdating = getNode(index).value;
-        getNode(index).value = value;
+        Node<E> nodeToUpdate = getNode(index);
+        E beforeUpdating = nodeToUpdate.value;
+        nodeToUpdate.value = value;
         return beforeUpdating;
     }
 
     public void clear() {
+        for(Node<E> current = head; current != null; ) {
+            Node<E> next = current.next;
+            current.value = null;
+            current.next = null;
+            current.prev = null;
+            current = next;
+        }
         tail = head = null;
         size = 0;
     }
@@ -151,11 +159,19 @@ public class LinkedList<E> implements List<E> {
     }
 
     private Node<E> getNode(int index) {
-        Node<E> current = head;
-        for (int i = 1; i <= index; i++) {
+        if (index < (size >> 1)) {
+            Node<E> current = head;
+            for (int i = 0; i < index; i++) {
                 current = current.next;
+            }
+            return current;
+        } else {
+            Node<E> current = tail;
+            for (int i = size - 1; i > index; i--) {
+                current = current.prev;
+            }
+            return current;
         }
-        return current;
     }
 
     private static class Node<E> {
@@ -163,7 +179,7 @@ public class LinkedList<E> implements List<E> {
         private Node<E> prev;
         private Node<E> next;
 
-        public Node(E value) {
+        private Node(E value) {
             this.value = value;
         }
     }

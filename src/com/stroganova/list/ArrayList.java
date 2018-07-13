@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.StringJoiner;
 
 public class ArrayList<E> implements List<E> {
-    static final int INITIAL_CAPACITY = 5;
+    private static final int INITIAL_CAPACITY = 5;
     private E[] array;
     private int size;
 
@@ -33,8 +33,7 @@ public class ArrayList<E> implements List<E> {
 
     public E get(int index) {
         validateIndex(index);
-        E result = array[index];
-        return result;
+        return array[index];
     }
 
     public E set(E value, int index) {
